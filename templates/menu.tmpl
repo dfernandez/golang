@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse">
+<nav class="fixed-navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -12,12 +12,12 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li {{if eq current "frontend/secret"}}class="active"{{end}}><a href="/profile">Profile</a></li>
-        <li {{if eq current "frontend/other"}}class="active"{{end}}><a href="#">Other</a></li>       
+        <li {{if eq current "frontend/item"}}class="active"{{end}}><a href="#">Item</a></li>
+        <li {{if eq current "frontend/item"}}class="active"{{end}}><a href="#">Item</a></li>       
       </ul>
       <ul class="nav navbar-nav navbar-right">
       	{{ if .profile }}
-        <li><a href="/profile">{{.profile.Name}}</a></li>
+        <li><a href="/profile">{{.profile.Name}} <span class="badge">2</span></a></li>
         <li><a href="/logout">Logout</a></li>
         {{ else }}
         <li><a href="/login">Login</a></li>

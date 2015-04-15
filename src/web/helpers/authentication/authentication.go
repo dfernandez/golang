@@ -116,7 +116,7 @@ var Google = func() martini.Handler {
 			ClientID:     secretParams.Google.ClientId,
 			ClientSecret: secretParams.Google.SecretId,
 			Scopes:       []string{"openid email", "https://www.googleapis.com/auth/userinfo.profile"},
-			RedirectURL:  "http://" + r.Host + "/login/google/callback",
+			RedirectURL:  "https://www.colernio.com/login/google/callback",
 			Endpoint:     google.Endpoint,
 		}
 
@@ -167,7 +167,7 @@ var Facebook = func() martini.Handler {
 			ClientID:     secretParams.Facebook.ClientId,
 			ClientSecret: secretParams.Facebook.SecretId,
 			Scopes:       []string{"email", "public_profile"},
-			RedirectURL:  "http://" + r.Host + "/login/facebook/callback",
+			RedirectURL:  "https://www.colernio.com/login/facebook/callback",
 			Endpoint:     facebook.Endpoint,
 		}
 

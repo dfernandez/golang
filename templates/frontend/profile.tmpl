@@ -1,6 +1,7 @@
-<img src="{{.profile.Picture}}" style="width: 40px; float: left; margin-right: 10px" />
-{{.profile.ID}}<br />
-{{.profile.Name}}<br />
-{{.profile.Email}}<br />
-{{.profile.Profile}}<br />
-{{.profile.GetCreationDate}}
+<div class="profile-container">
+    <img src="{{.profile.Picture}}" class="img-thumbnail profile-image pull-left" />
+    <div>
+        <h1 class="profile-h1">{{.profile.Name}}</h1>
+        <p>{{.profile.Email}}</p>
+    </div>
+</div>

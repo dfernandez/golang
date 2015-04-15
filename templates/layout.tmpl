@@ -15,10 +15,16 @@
 	  <div class="row">
 	    {{ template "menu" . }}
 	  </div>
-	  <div class="row">
+	  <div class="row main-container">
 	  	{{ yield }}
 	  </div>
 	</div>
+
+    	<footer class="footer">
+      		<div class="container footer-container">
+        		<p class="text-muted text-right">colernio.com</p>
+      		</div>
+    	</footer>
 
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
