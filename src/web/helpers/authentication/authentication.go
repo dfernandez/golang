@@ -116,7 +116,7 @@ var Google = func() martini.Handler {
 			ClientID:     secretParams.Google.ClientId,
 			ClientSecret: secretParams.Google.SecretId,
 			Scopes:       []string{"openid email", "https://www.googleapis.com/auth/userinfo.profile"},
-			RedirectURL:  "http://localhost:3000/login/google/callback",
+			RedirectURL:  "http://" + r.Host + "/login/google/callback",
 			Endpoint:     google.Endpoint,
 		}
 
