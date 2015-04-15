@@ -1,4 +1,8 @@
 {{ range $index, $err := .errors }}
-<pre>{{ $err }}</pre>
+<pre class="bg-danger">{{ $err }}</pre>
 {{ end }}
-<a href="/login/google">google</a> | <a href="/login/facebook">facebook</a>
+
+<div class="col-md-4 col-md-offset-4 login-buttons">
+	<a class="btn btn-primary btn-block" href="/login/facebook" role="button">Sign in with Facebook</a>
+	<a class="btn btn-danger btn-block" href="/login/google" role="button">Sign in with Google</a>
+</div>
