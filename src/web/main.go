@@ -6,12 +6,27 @@ import "github.com/martini-contrib/sessions"
 import "net/http"
 import "database/sql"
 import _ "github.com/go-sql-driver/mysql"
+import "code.google.com/p/gcfg"
 
 import "web/controllers/frontend"
 import "web/controllers/backend"
 import "web/helpers/authentication"
+import "os"
 
 var db *sql.DB
+
+type Config struct {
+	Mysql struct {
+		Dns string
+	}
+}
+
+var secretParams Config
+
+func init() {
+	path := os.Getenv("GOPATH") + "/cfg/database.ini"
+	gcfg.ReadFileInto(&secretParams, path)
+}
 
 func main() {
 
@@ -55,7 +70,7 @@ func getDB() *sql.DB {
 	var err error
 
 	if db == nil {
-		db, err = sql.Open("mysql", "username:password@tcp(hostname:3306)/database")
+		db, err = sql.Open("mysql", secretParams.Mysql.Dns)
 		if err != nil {
 			panic(err)
 		}

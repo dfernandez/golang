@@ -1,0 +1,2 @@
+[mysql]
+dns = "username:password@tcp(hostname:3306)/database"
