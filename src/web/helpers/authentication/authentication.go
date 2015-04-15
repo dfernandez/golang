@@ -167,7 +167,7 @@ var Facebook = func() martini.Handler {
 			ClientID:     secretParams.Facebook.ClientId,
 			ClientSecret: secretParams.Facebook.SecretId,
 			Scopes:       []string{"email", "public_profile"},
-			RedirectURL:  "http://localhost:3000/login/facebook/callback",
+			RedirectURL:  "http://" + r.Host + "/login/facebook/callback",
 			Endpoint:     facebook.Endpoint,
 		}
 
