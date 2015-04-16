@@ -1,5 +1,4 @@
-cfg/database.ini
-cfg/secret.ini
+cfg/*.gcfg
 pkg
 src/code.google.com
 src/github.com

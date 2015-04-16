@@ -1,0 +1,19 @@
+[oauth "google"]
+clientId = ""
+secretId = ""
+
+[oauth "facebook"]
+clientId = ""
+secretId = ""
+
+[mysql "production"]
+dns = "username:password@tcp(hostname:3306)/database"
+
+[mysql "development"]
+dns = "username:password@tcp(hostname:3306)/database"
+
+[domain "production"]
+url = "https://www.colernio.com"
+
+[domain "development"]
+url = "http://localhost:3000"

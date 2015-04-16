@@ -3,18 +3,15 @@ package authentication
 import "encoding/json"
 import "encoding/gob"
 import "net/http"
-import "os"
-import "log"
 import "io/ioutil"
 import "fmt"
 import "github.com/go-martini/martini"
 import "github.com/martini-contrib/sessions"
-import "github.com/martini-contrib/render"
 import "golang.org/x/oauth2"
 import "golang.org/x/oauth2/google"
 import "golang.org/x/oauth2/facebook"
 import "web/models/user"
-import "code.google.com/p/gcfg"
+import "web/helpers/configuration"
 
 const authToken = "oauth2_token"
 const authProfile = "oauth2_profile"
@@ -31,19 +28,6 @@ var urlProfile = "/profile"
 
 // PathLogoutOK is the path to redirect when logout success.
 var urlExit = "/"
-
-type Config struct {
-	Google struct {
-		ClientId string
-		SecretId string
-	}
-	Facebook struct {
-		ClientId string
-		SecretId string
-	}
-}
-
-var secretParams Config
 
 // Token struct.
 type token struct {
@@ -81,7 +65,7 @@ var LoginRequired = func() martini.Handler {
 }()
 
 var Basic = func() martini.Handler {
-	return func(s sessions.Session, c martini.Context, w http.ResponseWriter, r *http.Request, render render.Render) {
+	return func(s sessions.Session, c martini.Context, w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/logout" {
 			s.Delete(authToken)
 			s.Delete(authProfile)
@@ -91,8 +75,6 @@ var Basic = func() martini.Handler {
 		// Check token validity.
 		tk := getToken(s)
 		if tk != nil {
-
-			log.Printf("check token: %t", tk.Valid())
 
 			if !tk.Valid() && tk.RefreshToken == "" {
 				s.Delete(authToken)
@@ -110,13 +92,13 @@ var Basic = func() martini.Handler {
 }()
 
 var Google = func() martini.Handler {
-	return func(s sessions.Session, c martini.Context, w http.ResponseWriter, r *http.Request, render render.Render) {
+	return func(s sessions.Session, c martini.Context, w http.ResponseWriter, r *http.Request, app configuration.Application) {
 		config := make(map[string]*oauth2.Config)
 		config["google"] = &oauth2.Config{
-			ClientID:     secretParams.Google.ClientId,
-			ClientSecret: secretParams.Google.SecretId,
+			ClientID:     app.OAuth["google"].ClientId,
+			ClientSecret: app.OAuth["google"].SecretId,
 			Scopes:       []string{"openid email", "https://www.googleapis.com/auth/userinfo.profile"},
-			RedirectURL:  "https://www.colernio.com/login/google/callback",
+			RedirectURL:  app.Domain[martini.Env].Url + "/login/google/callback",
 			Endpoint:     google.Endpoint,
 		}
 
@@ -161,13 +143,13 @@ var Google = func() martini.Handler {
 }()
 
 var Facebook = func() martini.Handler {
-	return func(s sessions.Session, c martini.Context, w http.ResponseWriter, r *http.Request, render render.Render) {
+	return func(s sessions.Session, c martini.Context, w http.ResponseWriter, r *http.Request, app configuration.Application) {
 		config := make(map[string]*oauth2.Config)
 		config["facebook"] = &oauth2.Config{
-			ClientID:     secretParams.Facebook.ClientId,
-			ClientSecret: secretParams.Facebook.SecretId,
+			ClientID:     app.OAuth["facebook"].ClientId,
+			ClientSecret: app.OAuth["facebook"].SecretId,
 			Scopes:       []string{"email", "public_profile"},
-			RedirectURL:  "https://www.colernio.com/login/facebook/callback",
+			RedirectURL:  app.Domain[martini.Env].Url + "/login/facebook/callback",
 			Endpoint:     facebook.Endpoint,
 		}
 
@@ -226,10 +208,6 @@ func init() {
 	// Register oauthProfile struct in session handler.
 	var profile oauthProfile
 	gob.Register(profile)
-
-	// TODO
-	path := os.Getenv("GOPATH") + "/cfg/secret.ini"
-	gcfg.ReadFileInto(&secretParams, path)
 }
 
 func getProfile(s sessions.Session) (t *user.Profile) {
