@@ -13,6 +13,7 @@ import "web/controllers/backend"
 import "web/helpers/authentication"
 import "web/helpers/configuration"
 import "os"
+import "web/models/user"
 
 var db *sql.DB
 
@@ -29,7 +30,6 @@ func init() {
 }
 
 func main() {
-
 	// Database
 	db = getDB()
 	defer db.Close()
@@ -38,31 +38,48 @@ func main() {
 	store := sessions.NewCookieStore([]byte("myapp"))
 
 	// Start martini
-	m := martini.Classic()
+	m := martini.New()
+
+	// Logger.
+	m.Use(martini.Logger())
+
+	// Default layout.
+	m.Use(render.Renderer(render.Options{Layout: "layout"}))
+
+	// Statics.
+	m.Use(martini.Static("public"))
+
+	// Sessions.
+	m.Use(sessions.Sessions("session", store))
+
+	// OAuth Authentication
+	m.Use(authentication.Basic)
+	m.Use(authentication.Google)
+	m.Use(authentication.Facebook)
+
+	// Recovery. Needs to be after render, logger and oauth.
+	m.Use(error500())
+
+	// Routing
+	r := martini.NewRouter()
 
 	// Routing frontend
-	m.Group("/", func(r martini.Router) {
+	r.Group("/", func(r martini.Router) {
 		r.Get("", frontend.Index)
 		r.Get("login", frontend.Login)
 		r.Get("profile", authentication.LoginRequired, frontend.Profile)
 	})
 
 	// Routing backend
-	m.Group("/admin", func(r martini.Router) {
+	r.Group("/admin", func(r martini.Router) {
 		r.Get("", backend.Index)
 	})
 
 	// 404 Handler
-	m.NotFound(error404)
+	r.NotFound(error404)
 
-	// Sessions & layout
-	m.Use(sessions.Sessions("session", store))
-	m.Use(render.Renderer(render.Options{Layout: "layout"}))
-
-	// Authentication
-	m.Use(authentication.Basic)
-	m.Use(authentication.Google)
-	m.Use(authentication.Facebook)
+	m.MapTo(r, (*martini.Routes)(nil))
+	m.Action(r.Handle)
 
 	// Dependency injection
 	m.Map(db)
@@ -70,6 +87,24 @@ func main() {
 	m.Run()
 }
 
+// Recover from application panics.
+func error500() martini.Handler {
+	return func(c martini.Context, r render.Render, profile user.Profiler) {
+		view := make(map[string]interface{})
+		view["profile"] = profile
+
+		defer func() {
+			if err := recover(); err != nil {
+				view["panic"] = err
+				r.HTML(http.StatusInternalServerError, "error500", view)
+			}
+		}()
+
+		c.Next()
+	}
+}
+
+// Handler for 404 pages.
 func error404(r render.Render) {
 	r.HTML(http.StatusNotFound, "error404", nil)
 }
