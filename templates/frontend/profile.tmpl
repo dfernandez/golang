@@ -1,7 +1,7 @@
 <div class="profile-container">
-    <img src="{{.profile.Picture}}" class="img-thumbnail profile-image pull-left" />
+    <img src="{{ (.Get "profile").Picture }}" class="img-thumbnail profile-image pull-left" />
     <div>
-        <h1 class="profile-h1">{{.profile.Name}}</h1>
-        <p>{{.profile.Email}}</p>
+        <h1 class="profile-h1">{{ (.Get "profile").Name }}</h1>
+        <p>{{ (.Get "profile").Email }}</p>
     </div>
 </div>

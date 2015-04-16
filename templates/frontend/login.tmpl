@@ -1,4 +1,4 @@
-{{ range $index, $err := .errors }}
+{{ range $index, $err := .Get "errors" }}
 <pre class="bg-danger">{{ $err }}</pre>
 {{ end }}
 

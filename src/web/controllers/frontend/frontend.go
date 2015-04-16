@@ -4,28 +4,23 @@ import "net/http"
 import "web/models/user"
 import "github.com/martini-contrib/render"
 import "github.com/martini-contrib/sessions"
+import "web/helpers/view"
 
-var view map[string]interface{}
+func Index(r render.Render, profile user.Profiler, v view.Container) {
+	v.Set("profile", profile)
 
-func init() {
-	view = make(map[string]interface{})
+	r.HTML(http.StatusOK, "frontend/index", v)
 }
 
-func Index(r render.Render, profile user.Profiler) {
-	view["profile"] = profile
+func Login(r render.Render, profile user.Profiler, s sessions.Session, v view.Container) {
+	v.Set("profile", profile)
+	v.Set("errors", s.Flashes())
 
-	r.HTML(http.StatusOK, "frontend/index", view)
+	r.HTML(http.StatusOK, "frontend/login", v)
 }
 
-func Login(r render.Render, profile user.Profiler, s sessions.Session) {
-	view["profile"] = profile
-	view["errors"] = s.Flashes()
+func Profile(r render.Render, profile user.Profiler, v view.Container) {
+	v.Set("profile", profile)
 
-	r.HTML(http.StatusOK, "frontend/login", view)
-}
-
-func Profile(r render.Render, profile user.Profiler) {
-	view["profile"] = profile
-
-	r.HTML(http.StatusOK, "frontend/profile", view)
+	r.HTML(http.StatusOK, "frontend/profile", v)
 }

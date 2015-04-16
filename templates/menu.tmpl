@@ -16,8 +16,8 @@
         <li {{if eq current "frontend/item"}}class="active"{{end}}><a href="#">Item</a></li>       
       </ul>
       <ul class="nav navbar-nav navbar-right">
-      	{{ if .profile }}
-        <li><a href="/profile">{{.profile.Name}} <span class="badge">2</span></a></li>
+      	{{ if .Get "profile" }}
+        <li><a href="/profile">{{ (.Get "profile").Name }} <span class="badge">2</span></a></li>
         <li><a href="/logout">Logout</a></li>
         {{ else }}
         <li><a href="/login">Login</a></li>

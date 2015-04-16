@@ -12,6 +12,8 @@ import "web/controllers/frontend"
 import "web/controllers/backend"
 import "web/helpers/authentication"
 import "web/helpers/configuration"
+import "web/helpers/view"
+import "log"
 import "os"
 import "web/models/user"
 
@@ -84,6 +86,14 @@ func main() {
 	// Dependency injection
 	m.Map(db)
 	m.Map(config)
+
+	// View container
+	v := new(view.Content)
+	v.Initialize()
+
+	m.Map(v)
+
+	// Run martini!
 	m.Run()
 }
 
@@ -95,6 +105,8 @@ func error500() martini.Handler {
 
 		defer func() {
 			if err := recover(); err != nil {
+				log.Printf("panic: %s", err)
+
 				view["panic"] = err
 				r.HTML(http.StatusInternalServerError, "error500", view)
 			}
