@@ -143,7 +143,7 @@ var Google = func() martini.Handler {
 }()
 
 var Facebook = func() martini.Handler {
-	return func(s sessions.Session, c martini.Context, w http.ResponseWriter, r *http.Request, app configuration.Application) {
+	return func(s sessions.Session, c martini.Context, w http.ResponseWriter, r *http.Request, render render.Render, app configuration.Application) {
 		config := make(map[string]*oauth2.Config)
 		config["facebook"] = &oauth2.Config{
 			ClientID:     app.OAuth["facebook"].ClientId,
