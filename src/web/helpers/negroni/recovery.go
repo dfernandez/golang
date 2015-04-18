@@ -27,10 +27,6 @@ func NewRecovery() *MyRecovery {
 func (rec *MyRecovery) ServeHTTP(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	defer func() {
 		if err := recover(); err != nil {
-			// rw.WriteHeader(http.StatusInternalServerError)
-			// stack := make([]byte, rec.StackSize)
-			// stack = stack[:runtime.Stack(stack, rec.StackAll)]
-
 			rec.Logger.Printf("PANIC: %s\n", err)
 
 			renderer := NewRenderError()

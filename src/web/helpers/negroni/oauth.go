@@ -67,10 +67,12 @@ var BasicOAuth = func() negroni.HandlerFunc {
 				tk = nil
 
 				http.Redirect(rw, r, "/login", http.StatusFound)
+			} else {
+				next(rw, r)
 			}
+		} else {
+			next(rw, r)
 		}
-
-		next(rw, r)
 	}
 }()
 

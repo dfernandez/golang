@@ -31,13 +31,6 @@ func NewContainer(r *http.Request) *Content {
 	return c
 }
 
-func NewContainerError(r *http.Request) *Content {
-	c := new(Content)
-	c.vars = make(map[string]interface{})
-
-	return c	
-}
-
 func (c *Content) Get(key string) interface{} {
 	return c.vars[key]
 }
