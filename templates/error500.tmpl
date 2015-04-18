@@ -1,2 +1,45 @@
-<h1>Error 500</h1>
-<pre class="bg-danger">{{ .Get "panic" }}</pre>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Negroni!</title>
+
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	<div class="container menu-container">
+	  <div class="row">
+	    <nav class="fixed-navbar navbar-inverse">
+		  <div class="container-fluid">
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="/">HOME</a>
+		    </div>
+		  </div>
+		</nav>
+	  </div>
+	  <div class="row main-container">
+	  	<h1>Error 500</h1>
+		<pre class="bg-danger">Oooops! Something bad happened :(</pre>
+	  </div>
+	</div>
+
+    	<footer class="footer">
+      		<div class="container footer-container">
+        		<p class="text-muted text-right">colernio.com</p>
+      		</div>
+    	</footer>
+
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+</body>
+</html>

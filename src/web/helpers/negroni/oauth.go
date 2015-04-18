@@ -51,6 +51,7 @@ var BasicOAuth = func() negroni.HandlerFunc {
 		if r.Method == "GET" {
 			if r.URL.Path == "/logout" {
 				s.Delete(authToken)
+				s.Delete(authProfile)
 				http.Redirect(rw, r, "/", http.StatusFound)
 			}
 		}

@@ -3,7 +3,6 @@ package negroni
 import (
 	"encoding/gob"
 	sessions "github.com/goincremental/negroni-sessions"
-	"github.com/gorilla/context"
 	"net/http"
 )
 
@@ -21,19 +20,22 @@ func NewContainer(r *http.Request) *Content {
 	c := new(Content)
 	c.vars = make(map[string]interface{})
 
-	cs := context.Get(r, "mysession")
+	s := sessions.GetSession(r)
 
-	if cs != nil {
-		s := sessions.GetSession(r)
+	var profile OauthProfile
+	gob.Register(profile)
 
-		var profile OauthProfile
-		gob.Register(profile)
-
-		p := s.Get("oauth_profile")
-		c.Set("profile", p)
-	}
+	p := s.Get("oauth_profile")
+	c.Set("profile", p)
 
 	return c
+}
+
+func NewContainerError(r *http.Request) *Content {
+	c := new(Content)
+	c.vars = make(map[string]interface{})
+
+	return c	
 }
 
 func (c *Content) Get(key string) interface{} {

@@ -17,6 +17,13 @@ func NewRender() *MyRender {
 	return &MyRender{render}
 }
 
+func NewRenderError() *MyRender {
+
+	render := render.New(render.Options{Layout: ""})
+
+	return &MyRender{render}
+}
+
 func (render MyRender) ServeHTTP(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 
 	// Attach the renderer

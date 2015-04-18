@@ -48,6 +48,8 @@ func main() {
 		negroni.Wrap(profileRouter),
 	))
 
+	router.NotFoundHandler = http.HandlerFunc(NotFound)
+
 	// Logger
 	logger := negroni.NewLogger()
 
@@ -66,9 +68,9 @@ func main() {
 
 	// Middleware
 	n.Use(logger)
-	n.Use(render)
 	n.Use(static)
 	n.Use(session)
+	n.Use(render)
 	n.Use(recovery)
 
 	// OAuth Authentication
@@ -82,4 +84,11 @@ func main() {
 	// Run negroni run!
 	fmt.Printf("[negroni] %s\n", os.Getenv("ENV"))
 	n.Run(":3000")
+}
+
+func NotFound(rw http.ResponseWriter, r *http.Request) {
+	v := helpers.NewContainer(r)
+
+	renderer := helpers.NewRender()
+	renderer.Render.HTML(rw, http.StatusNotFound, "error404", v)
 }
