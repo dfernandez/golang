@@ -19,6 +19,7 @@ import (
 
 const authToken = "oauth_token"
 const authProfile = "oauth_profile"
+const profile = "profile"
 
 // Token struct.
 type token struct {
@@ -53,6 +54,7 @@ var BasicOAuth = func() negroni.HandlerFunc {
 			if r.URL.Path == "/logout" {
 				s.Delete(authToken)
 				s.Delete(authProfile)
+				s.Delete(profile)
 				http.Redirect(rw, r, "/", http.StatusFound)
 				return
 			}
@@ -66,6 +68,7 @@ var BasicOAuth = func() negroni.HandlerFunc {
 
 				s.Delete(authToken)
 				s.Delete(authProfile)
+				s.Delete(profile)
 				tk = nil
 
 				http.Redirect(rw, r, "/login", http.StatusFound)
@@ -74,7 +77,7 @@ var BasicOAuth = func() negroni.HandlerFunc {
 
 			// Load user.Profile
 			ap := getProfile(r)
-			s.Set("profile", ap)
+			s.Set(profile, ap)
 		}
 
 		next(rw, r)
