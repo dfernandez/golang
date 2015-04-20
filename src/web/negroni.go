@@ -38,7 +38,7 @@ func main() {
 	logger := negroni.NewLogger()
 
 	// Recovery
-	//recovery := helpers.NewRecovery()
+	recovery := helpers.NewRecovery()
 
 	// Render
 	render := helpers.NewRender()
@@ -55,7 +55,7 @@ func main() {
 	n.Use(static)
 	n.Use(session)
 	n.Use(render)
-	//n.Use(recovery)
+	n.Use(recovery)
 
 	// OAuth Authentication
 	n.Use(helpers.BasicOAuth)
