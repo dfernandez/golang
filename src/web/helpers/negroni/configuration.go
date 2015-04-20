@@ -1,6 +1,6 @@
-package configuration
+package negroni
 
-type Application struct {
+type Config struct {
 	OAuth map[string]*struct {
 		ClientId string
 		SecretId string
