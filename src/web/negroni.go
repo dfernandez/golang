@@ -8,8 +8,8 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"os"
-	helpers "web/helpers/negroni"
 	"web/controllers/frontend"
+	helpers "web/helpers/negroni"
 )
 
 func main() {
@@ -35,7 +35,7 @@ func main() {
 	router.NotFoundHandler = http.HandlerFunc(NotFound)
 
 	// Logger
-	logger := negroni.NewLogger()
+	logger := helpers.NewLogger()
 
 	// Recovery
 	recovery := helpers.NewRecovery()
