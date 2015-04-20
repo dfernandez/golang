@@ -53,6 +53,7 @@ var BasicOAuth = func() negroni.HandlerFunc {
 				s.Delete(authToken)
 				s.Delete(authProfile)
 				http.Redirect(rw, r, "/", http.StatusFound)
+				return
 			}
 		}
 
