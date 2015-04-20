@@ -1,4 +1,4 @@
-package negroni
+package mynegroni
 
 import (
 	"log"
@@ -8,7 +8,7 @@ import (
 
 // Recovery is a Negroni middleware that recovers from any panics and writes a 500 if there was one.
 type MyRecovery struct {
-	Logger     *log.Logger
+	Logger *log.Logger
 }
 
 // NewRecovery returns a new instance of Recovery

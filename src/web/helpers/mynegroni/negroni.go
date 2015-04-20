@@ -1,4 +1,4 @@
-package negroni
+package mynegroni
 
 import (
 	"github.com/codegangsta/negroni"

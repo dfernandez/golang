@@ -1,4 +1,4 @@
-package negroni
+package mynegroni
 
 import (
 	"code.google.com/p/gcfg"

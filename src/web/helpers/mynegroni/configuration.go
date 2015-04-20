@@ -1,4 +1,4 @@
-package negroni
+package mynegroni
 
 type Config struct {
 	OAuth map[string]*struct {

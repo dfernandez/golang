@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 	"web/controllers/frontend"
-	mynegroni "web/helpers/negroni"
+	"web/helpers/mynegroni"
 )
 
 func init() {
