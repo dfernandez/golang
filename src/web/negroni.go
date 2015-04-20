@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
+	"github.com/unrolled/render"
 	"net/http"
 	"os"
 	"web/controllers/frontend"
@@ -45,8 +46,11 @@ func main() {
 		negroni.Wrap(profileRouter),
 	))
 
+	render := render.New(render.Options{Layout: "layout"})
+
 	// Add router
 	n.UseHandler(router)
+	n.UseHandler(frontend.MyHandler(render))
 
 	// Run negroni run!
 	n.Run(":3000")

@@ -27,3 +27,9 @@ func Profile(rw http.ResponseWriter, r *http.Request) {
 	render := context.Get(r, "Render").(*render.Render)
 	render.HTML(rw, http.StatusOK, "frontend/profile", v)
 }
+
+func MyHandler(render *render.Render) http.Handler {
+	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		render.HTML(rw, http.StatusOK, "frontend/index", nil)
+	})
+}
