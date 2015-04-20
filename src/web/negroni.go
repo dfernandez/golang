@@ -27,31 +27,27 @@ func main() {
 
 	// Routing
 	router := mux.NewRouter()
+	router.NotFoundHandler = http.HandlerFunc(mynegroni.NotFound)
+
+	// Routing /
 	router.HandleFunc("/", frontend.Index)
+
+	// Routing /login
 	router.HandleFunc("/login", frontend.Login)
 
 	// Routing for /profile
 	profileRouter := mux.NewRouter()
 	profileRouter.HandleFunc("/profile", frontend.Profile)
 
-	// Login required middleware for /profile
+	// Login authentication required middleware for /profile
 	router.Handle("/profile", negroni.New(
 		mynegroni.LoginRequired,
 		negroni.Wrap(profileRouter),
 	))
 
-	router.NotFoundHandler = http.HandlerFunc(NotFound)
-
-	// Routing
+	// Add router
 	n.UseHandler(router)
 
 	// Run negroni run!
 	n.Run(":3000")
-}
-
-func NotFound(rw http.ResponseWriter, r *http.Request) {
-	v := mynegroni.NewContainer(r)
-
-	renderer := mynegroni.NewRender()
-	renderer.Render.HTML(rw, http.StatusNotFound, "error404", v)
 }
