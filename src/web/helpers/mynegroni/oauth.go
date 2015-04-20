@@ -1,7 +1,6 @@
 package mynegroni
 
 import (
-	"code.google.com/p/gcfg"
 	"encoding/gob"
 	"encoding/json"
 	"fmt"
@@ -210,8 +209,6 @@ var FacebookOAuth = func() negroni.HandlerFunc {
 	}
 }()
 
-var config Config
-
 func init() {
 
 	var user_profile user.Profile
@@ -219,14 +216,6 @@ func init() {
 
 	var oauth_profile oauthProfile
 	gob.Register(oauth_profile)
-
-	// Config file
-	path := os.Getenv("GOPATH") + "/cfg/app.gcfg"
-	err := gcfg.ReadFileInto(&config, path)
-
-	if err != nil {
-		panic(err)
-	}
 }
 
 var LoginRequired = func() negroni.HandlerFunc {

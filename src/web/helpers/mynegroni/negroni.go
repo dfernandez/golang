@@ -1,11 +1,25 @@
 package mynegroni
 
 import (
+	"code.google.com/p/gcfg"
 	"github.com/codegangsta/negroni"
 	sessions "github.com/goincremental/negroni-sessions"
 	"github.com/goincremental/negroni-sessions/cookiestore"
 	"net/http"
+	"os"
 )
+
+var config Config
+
+func init() {
+	// Config file
+	path := os.Getenv("GOPATH") + "/cfg/app.gcfg"
+	err := gcfg.ReadFileInto(&config, path)
+
+	if err != nil {
+		panic(err)
+	}
+}
 
 func New() *negroni.Negroni {
 
