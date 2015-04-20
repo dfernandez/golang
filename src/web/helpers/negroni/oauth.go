@@ -14,6 +14,7 @@ import (
 	_ "log"
 	"net/http"
 	"os"
+	"web/models/user"
 )
 
 const authToken = "oauth_token"
@@ -24,7 +25,7 @@ type token struct {
 	oauth2.Token
 }
 
-type OauthProfile struct {
+type oauthProfile struct {
 	ID      string `json:"id"`
 	Name    string `json:"name"`
 	Email   string `json:"email"`
@@ -68,12 +69,15 @@ var BasicOAuth = func() negroni.HandlerFunc {
 				tk = nil
 
 				http.Redirect(rw, r, "/login", http.StatusFound)
-			} else {
-				next(rw, r)
+				return
 			}
-		} else {
-			next(rw, r)
+
+			// Load user.Profile
+			ap := getProfile(r)
+			s.Set("profile", ap)
 		}
+
+		next(rw, r)
 	}
 }()
 
@@ -114,7 +118,7 @@ var GoogleOAuth = func() negroni.HandlerFunc {
 				defer response.Body.Close()
 				body, _ := ioutil.ReadAll(response.Body)
 
-				var profile OauthProfile
+				var profile oauthProfile
 				json.Unmarshal(body, &profile)
 
 				// Store the credentials in the session.
@@ -172,7 +176,7 @@ var FacebookOAuth = func() negroni.HandlerFunc {
 				defer response.Body.Close()
 				body, _ := ioutil.ReadAll(response.Body)
 
-				var profile OauthProfile
+				var profile oauthProfile
 				json.Unmarshal(body, &profile)
 
 				// Get profile picture
@@ -207,8 +211,11 @@ var config Config
 
 func init() {
 
-	var profile OauthProfile
-	gob.Register(profile)
+	var user_profile user.Profile
+	gob.Register(user_profile)
+
+	var oauth_profile oauthProfile
+	gob.Register(oauth_profile)
 
 	// Config file
 	path := os.Getenv("GOPATH") + "/cfg/app.gcfg"
@@ -230,6 +237,20 @@ var LoginRequired = func() negroni.HandlerFunc {
 		}
 	}
 }()
+
+func getProfile(r *http.Request) (t *user.Profile) {
+	s := sessions.GetSession(r)
+
+	if s.Get(authProfile) == nil {
+		return
+	}
+	// data contains oauth profile information.
+	data := s.Get(authProfile).(oauthProfile)
+
+	// todo. store/retrieve user obj. from database.
+
+	return &user.Profile{1, data.Name, data.Email, data.Profile, data.Picture}
+}
 
 func getToken(r *http.Request) (t *token) {
 	s := sessions.GetSession(r)

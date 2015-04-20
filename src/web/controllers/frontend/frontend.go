@@ -1,26 +1,29 @@
 package frontend
 
-import "net/http"
-import "web/models/user"
-import "github.com/martini-contrib/render"
-import "github.com/martini-contrib/sessions"
-import "web/helpers/view"
+import (
+	"net/http"
+	"github.com/unrolled/render"
+	"github.com/gorilla/context"
+	helpers "web/helpers/negroni"
+)	
 
-func Index(r render.Render, profile user.Profiler, v view.Container) {
-	v.Set("profile", profile)
+func Index(rw http.ResponseWriter, r *http.Request) {
+	v := helpers.NewContainer(r)
 
-	r.HTML(http.StatusOK, "frontend/index", v)
+	render := context.Get(r, "Render").(*render.Render)
+	render.HTML(rw, http.StatusOK, "frontend/index", v)
 }
 
-func Login(r render.Render, profile user.Profiler, s sessions.Session, v view.Container) {
-	v.Set("profile", profile)
-	v.Set("errors", s.Flashes())
+func Login(rw http.ResponseWriter, r *http.Request) {
+	v := helpers.NewContainer(r)
 
-	r.HTML(http.StatusOK, "frontend/login", v)
+	render := context.Get(r, "Render").(*render.Render)
+	render.HTML(rw, http.StatusOK, "frontend/login", v)
 }
 
-func Profile(r render.Render, profile user.Profiler, v view.Container) {
-	v.Set("profile", profile)
+func Profile(rw http.ResponseWriter, r *http.Request) {
+	v := helpers.NewContainer(r)
 
-	r.HTML(http.StatusOK, "frontend/profile", v)
+	render := context.Get(r, "Render").(*render.Render)
+	render.HTML(rw, http.StatusOK, "frontend/profile", v)
 }

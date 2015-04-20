@@ -9,18 +9,12 @@ import (
 // Recovery is a Negroni middleware that recovers from any panics and writes a 500 if there was one.
 type MyRecovery struct {
 	Logger     *log.Logger
-	PrintStack bool
-	StackAll   bool
-	StackSize  int
 }
 
 // NewRecovery returns a new instance of Recovery
 func NewRecovery() *MyRecovery {
 	return &MyRecovery{
-		Logger:     log.New(os.Stdout, "[negroni] ", 0),
-		PrintStack: true,
-		StackAll:   false,
-		StackSize:  1024 * 8,
+		Logger: log.New(os.Stdout, "[negroni] ", 0),
 	}
 }
 

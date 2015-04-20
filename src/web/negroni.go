@@ -5,12 +5,11 @@ import (
 	"github.com/codegangsta/negroni"
 	sessions "github.com/goincremental/negroni-sessions"
 	"github.com/goincremental/negroni-sessions/cookiestore"
-	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
-	"github.com/unrolled/render"
 	"net/http"
 	"os"
 	helpers "web/helpers/negroni"
+	"web/controllers/frontend"
 )
 
 func main() {
@@ -20,27 +19,12 @@ func main() {
 
 	// Routing
 	router := mux.NewRouter()
-	router.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
-		v := helpers.NewContainer(r)
-
-		render := context.Get(r, "Render").(*render.Render)
-		render.HTML(rw, http.StatusOK, "frontend/index", v)
-	})
-	router.HandleFunc("/login", func(rw http.ResponseWriter, r *http.Request) {
-		v := helpers.NewContainer(r)
-
-		render := context.Get(r, "Render").(*render.Render)
-		render.HTML(rw, http.StatusOK, "frontend/login", v)
-	})
+	router.HandleFunc("/", frontend.Index)
+	router.HandleFunc("/login", frontend.Login)
 
 	// Routing for /profile
 	profileRouter := mux.NewRouter()
-	profileRouter.HandleFunc("/profile", func(rw http.ResponseWriter, r *http.Request) {
-		v := helpers.NewContainer(r)
-
-		render := context.Get(r, "Render").(*render.Render)
-		render.HTML(rw, http.StatusOK, "frontend/profile", v)
-	})
+	profileRouter.HandleFunc("/profile", frontend.Profile)
 
 	// Login required middleware for /profile
 	router.Handle("/profile", negroni.New(
@@ -54,7 +38,7 @@ func main() {
 	logger := negroni.NewLogger()
 
 	// Recovery
-	recovery := helpers.NewRecovery()
+	//recovery := helpers.NewRecovery()
 
 	// Render
 	render := helpers.NewRender()
@@ -71,7 +55,7 @@ func main() {
 	n.Use(static)
 	n.Use(session)
 	n.Use(render)
-	n.Use(recovery)
+	//n.Use(recovery)
 
 	// OAuth Authentication
 	n.Use(helpers.BasicOAuth)

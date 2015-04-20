@@ -4,6 +4,7 @@ import (
 	"encoding/gob"
 	sessions "github.com/goincremental/negroni-sessions"
 	"net/http"
+	"web/models/user"
 )
 
 type Container interface {
@@ -22,10 +23,10 @@ func NewContainer(r *http.Request) *Content {
 
 	s := sessions.GetSession(r)
 
-	var profile OauthProfile
+	var profile user.Profile
 	gob.Register(profile)
 
-	p := s.Get("oauth_profile")
+	p := s.Get("profile")
 	c.Set("profile", p)
 
 	return c
