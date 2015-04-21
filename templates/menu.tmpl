@@ -7,11 +7,17 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/">HOME</a>
+      {{ if .Get "profile" }}
+      <a class="navbar-brand visible-xs-block" href="/profile"><img src="{{ (.Get "profile").Picture }}" width="20px" height="20px" /></a>
+      {{ else }}
+      <p class="navbar-text hidden-xs">Colernio</p>
+      <a class="navbar-brand visible-xs-block" href="/login"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+      {{ end }}
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
+        <li {{if eq current "frontend/index"}}class="active"{{end}}><a href="/">Home</a></li>
         <li {{if eq current "frontend/item"}}class="active"{{end}}><a href="#">Item</a></li>
         <li {{if eq current "frontend/item"}}class="active"{{end}}><a href="#">Item</a></li>       
       </ul>

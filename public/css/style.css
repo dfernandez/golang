@@ -22,12 +22,17 @@ body {
 }
 
 /* Menu */
-.menu-container {
 
+@media (max-width:767px) {
+  .navbar-toggle {
+    float: left;
+    margin-left: 10px;
+  }
+  .navbar-brand {
+    float: right;
+  }
 }
-.main-container {
 
-}
 .profile-menu-image {
 	height: 30px;
 }
