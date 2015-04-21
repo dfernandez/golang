@@ -60,7 +60,7 @@ var BasicOAuth = func() negroni.HandlerFunc {
 		}
 
 		// Check token validity.
-		tk := getToken(r)
+		tk := GetToken(r)
 		if tk != nil {
 
 			if !tk.Valid() && tk.RefreshToken == "" {
@@ -218,18 +218,6 @@ func init() {
 	gob.Register(oauth_profile)
 }
 
-var LoginRequired = func() negroni.HandlerFunc {
-	return func(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
-		token := getToken(r)
-
-		if token == nil || !token.Valid() {
-			http.Redirect(rw, r, "/login", http.StatusFound)
-		} else {
-			next(rw, r)
-		}
-	}
-}()
-
 func getProfile(r *http.Request) (t *user.Profile) {
 	s := sessions.GetSession(r)
 
@@ -244,7 +232,7 @@ func getProfile(r *http.Request) (t *user.Profile) {
 	return &user.Profile{1, data.Name, data.Email, data.Profile, data.Picture}
 }
 
-func getToken(r *http.Request) (t *token) {
+func GetToken(r *http.Request) (t *token) {
 	s := sessions.GetSession(r)
 
 	if s.Get(authToken) == nil {

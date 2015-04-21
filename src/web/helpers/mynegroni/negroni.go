@@ -28,18 +28,17 @@ func New() *negroni.Negroni {
 	// Logger
 	logger := NewLogger()
 
-	// Recovery
-	recovery := NewRecovery()
-
-	// Render
-	render := NewRender()
-
 	// Static
 	static := negroni.NewStatic(http.Dir("public"))
 
 	// Sessions
-	store := cookiestore.New([]byte("myapp"))
-	session := sessions.Sessions("mysession", store)
+	session := sessions.Sessions("mysession", cookiestore.New([]byte("myapp")))
+
+	// Render
+	render := NewRender()
+
+	// Recovery
+	recovery := NewRecovery()
 
 	// Middleware
 	n.Use(logger)

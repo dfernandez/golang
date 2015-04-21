@@ -1,35 +1,60 @@
 package frontend
 
 import (
+	"github.com/codegangsta/negroni"
+	sessions "github.com/goincremental/negroni-sessions"
 	"github.com/gorilla/context"
 	"github.com/unrolled/render"
 	"net/http"
 	"web/helpers/mynegroni"
 )
 
-func Index(rw http.ResponseWriter, r *http.Request) {
-	v := mynegroni.NewContainer(r)
+var Controller = func() negroni.HandlerFunc {
+	return func(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+		render := context.Get(r, "Render").(*render.Render)
+		session := sessions.GetSession(r)
+		container := mynegroni.NewContainer(r)
 
-	render := context.Get(r, "Render").(*render.Render)
-	render.HTML(rw, http.StatusOK, "frontend/index", v)
-}
+		switch r.URL.Path {
 
-func Login(rw http.ResponseWriter, r *http.Request) {
-	v := mynegroni.NewContainer(r)
+		case "/":
+			Index(rw, r, render, session, container)
 
-	render := context.Get(r, "Render").(*render.Render)
-	render.HTML(rw, http.StatusOK, "frontend/login", v)
-}
+		case "/login":
+			Login(rw, r, render, session, container)
 
-func Profile(rw http.ResponseWriter, r *http.Request) {
-	v := mynegroni.NewContainer(r)
+		case "/profile":
+			Profile(rw, r, render, session, container)
 
-	render := context.Get(r, "Render").(*render.Render)
-	render.HTML(rw, http.StatusOK, "frontend/profile", v)
-}
+		default:
+			next(rw, r)
+		}
+	}
+}()
 
-func MyHandler(render *render.Render) http.Handler {
-	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-		render.HTML(rw, http.StatusOK, "frontend/index", nil)
-	})
-}
+var Restricted = func() negroni.HandlerFunc {
+	return func(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+
+		switch r.URL.Path {
+		case "/profile":
+			token := mynegroni.GetToken(r)
+
+			if token == nil || !token.Valid() {
+				http.Redirect(rw, r, "/login", http.StatusFound)
+			} else {
+				next(rw, r)
+			}
+		default:
+			next(rw, r)
+		}
+	}
+}()
+
+var NotFound = func() negroni.HandlerFunc {
+	return func(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+		render := context.Get(r, "Render").(*render.Render)
+		container := mynegroni.NewContainer(r)
+
+		render.HTML(rw, http.StatusNotFound, "error404", container)
+	}
+}()
