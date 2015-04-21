@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
+	"net/http"
 	"os"
 	"web/controllers/backend"
 	"web/controllers/frontend"
@@ -39,6 +40,7 @@ func main() {
 
 	// Routers
 	mainRouter.Handle("/backend", routerBack)
+	mainRouter.NotFoundHandler = http.HandlerFunc(mynegroni.NotFound)
 	n.UseHandler(mainRouter)
 
 	// Run negroni run!
