@@ -10,7 +10,6 @@ import (
 	"golang.org/x/oauth2/facebook"
 	"golang.org/x/oauth2/google"
 	"io/ioutil"
-	_ "log"
 	"net/http"
 	"os"
 	"web/models/user"

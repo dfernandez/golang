@@ -45,19 +45,14 @@ func New() *negroni.Negroni {
 	n.Use(static)
 	n.Use(session)
 	n.Use(render)
-	n.Use(recovery)
 
 	// OAuth Authentication
 	n.Use(BasicOAuth)
 	n.Use(GoogleOAuth)
 	n.Use(FacebookOAuth)
 
+	// Recovery
+	n.Use(recovery)
+
 	return n
-}
-
-func NotFound(rw http.ResponseWriter, r *http.Request) {
-	v := NewContainer(r)
-
-	renderer := NewRender()
-	renderer.Render.HTML(rw, http.StatusNotFound, "error404", v)
 }
