@@ -19,12 +19,13 @@ func NewRecovery() *MyRecovery {
 }
 
 func (rec *MyRecovery) ServeHTTP(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+	v := NewContainer(r)
 	defer func() {
 		if err := recover(); err != nil {
 			rec.Logger.Printf("PANIC: %s\n", err)
 
-			renderer := NewRenderError()
-			renderer.Render.HTML(rw, http.StatusInternalServerError, "error500", nil)
+			renderer := NewRender()
+			renderer.Render.HTML(rw, http.StatusInternalServerError, "error500", v)
 		}
 	}()
 

@@ -28,37 +28,31 @@ func New() *negroni.Negroni {
 	// Logger
 	logger := NewLogger()
 
-	// Recovery
-	recovery := NewRecovery()
-
-	// Render
-	render := NewRender()
-
 	// Static
 	static := negroni.NewStatic(http.Dir("public"))
 
 	// Sessions
-	store := cookiestore.New([]byte("myapp"))
-	session := sessions.Sessions("mysession", store)
+	session := sessions.Sessions("mysession", cookiestore.New([]byte("myapp")))
+
+	// Render
+	render := NewRender()
+
+	// Recovery
+	recovery := NewRecovery()
 
 	// Middleware
 	n.Use(logger)
 	n.Use(static)
 	n.Use(session)
 	n.Use(render)
-	n.Use(recovery)
 
 	// OAuth Authentication
 	n.Use(BasicOAuth)
 	n.Use(GoogleOAuth)
 	n.Use(FacebookOAuth)
 
+	// Recovery
+	n.Use(recovery)
+
 	return n
-}
-
-func NotFound(rw http.ResponseWriter, r *http.Request) {
-	v := NewContainer(r)
-
-	renderer := NewRender()
-	renderer.Render.HTML(rw, http.StatusNotFound, "error404", v)
 }

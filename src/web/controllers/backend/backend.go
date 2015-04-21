@@ -1,7 +1,7 @@
-package frontend
+package backend
 
 import (
-	"github.com/codegangsta/negroni"
+	_ "github.com/codegangsta/negroni"
 	sessions "github.com/goincremental/negroni-sessions"
 	"github.com/gorilla/context"
 	"github.com/unrolled/render"
@@ -18,15 +18,3 @@ func Controller(action func(http.ResponseWriter, *http.Request, *render.Render, 
 		action(rw, r, render, session, container)
 	})
 }
-
-var LoginRequired = func() negroni.HandlerFunc {
-	return func(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
-		token := mynegroni.GetToken(r)
-
-		if token == nil || !token.Valid() {
-			http.Redirect(rw, r, "/login", http.StatusFound)
-		} else {
-			next(rw, r)
-		}
-	}
-}()
