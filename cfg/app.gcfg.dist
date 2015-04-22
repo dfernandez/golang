@@ -6,11 +6,13 @@ secretId = ""
 clientId = ""
 secretId = ""
 
-[mysql "production"]
-dns = "username:password@tcp(hostname:3306)/database"
+[database "production"]
+connector = "mysql"
+dns       = "username:password@tcp(hostname:3306)/database" 
 
-[mysql "development"]
-dns = "username:password@tcp(hostname:3306)/database"
+[database "development"]
+connector = "mysql"
+dns       = "username:password@tcp(hostname:3306)/database" 
 
 [domain "production"]
 url = "https://www.colernio.com"
