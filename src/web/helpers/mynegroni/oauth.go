@@ -16,8 +16,7 @@ import (
 )
 
 const authToken = "oauth_token"
-const authProfile = "oauth_profile"
-const profile = "profile"
+const userProfile = "profile"
 
 // Token struct.
 type token struct {
@@ -51,8 +50,7 @@ var BasicOAuth = func() negroni.HandlerFunc {
 		if r.Method == "GET" {
 			if r.URL.Path == "/logout" {
 				s.Delete(authToken)
-				s.Delete(authProfile)
-				s.Delete(profile)
+				s.Delete(userProfile)
 				http.Redirect(rw, r, "/", http.StatusFound)
 				return
 			}
@@ -61,21 +59,21 @@ var BasicOAuth = func() negroni.HandlerFunc {
 		// Check token validity.
 		tk := GetToken(r)
 		if tk != nil {
-
 			if !tk.Valid() && tk.RefreshToken == "" {
 
 				s.Delete(authToken)
-				s.Delete(authProfile)
-				s.Delete(profile)
+				s.Delete(userProfile)
 				tk = nil
 
 				http.Redirect(rw, r, "/login", http.StatusFound)
 				return
 			}
+		}
 
-			// Load user.Profile
-			ap := getProfile(r)
-			s.Set(profile, ap)
+		// Load user.Profile
+		ap := getProfile(r)
+		if ap != nil {
+			s.Set(userProfile, ap)
 		}
 
 		next(rw, r)
@@ -127,7 +125,10 @@ var GoogleOAuth = func() negroni.HandlerFunc {
 
 				// Save token and profile to session.
 				s.Set(authToken, val)
-				s.Set(authProfile, profile)
+
+				// Load user.Profile
+				ap := setProfile(profile)
+				s.Set(userProfile, ap)
 
 				http.Redirect(rw, r, "/profile", http.StatusFound)
 
@@ -195,7 +196,10 @@ var FacebookOAuth = func() negroni.HandlerFunc {
 
 				// Save token and profile to session.
 				s.Set(authToken, val)
-				s.Set(authProfile, profile)
+
+				// Load user.Profile
+				ap := setProfile(profile)
+				s.Set(userProfile, ap)
 
 				http.Redirect(rw, r, "/profile", http.StatusFound)
 
@@ -209,7 +213,6 @@ var FacebookOAuth = func() negroni.HandlerFunc {
 }()
 
 func init() {
-
 	var user_profile user.Profile
 	gob.Register(user_profile)
 
@@ -217,18 +220,23 @@ func init() {
 	gob.Register(oauth_profile)
 }
 
+func setProfile(p oauthProfile) (t *user.Profile) {
+	return &user.Profile{1, p.Name, p.Email, p.Profile, p.Picture}
+}
+
 func getProfile(r *http.Request) (t *user.Profile) {
 	s := sessions.GetSession(r)
 
-	if s.Get(authProfile) == nil {
+	if s.Get(userProfile) == nil {
 		return
 	}
+
 	// data contains oauth profile information.
-	data := s.Get(authProfile).(oauthProfile)
+	data := s.Get(userProfile).(user.Profile)
 
 	// todo. store/retrieve user obj. from database.
 
-	return &user.Profile{1, data.Name, data.Email, data.Profile, data.Picture}
+	return &user.Profile{data.ID, data.Name, data.Email, data.Profile, data.Picture}
 }
 
 func GetToken(r *http.Request) (t *token) {
