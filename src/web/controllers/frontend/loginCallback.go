@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/context"
 	"github.com/unrolled/render"
 	"net/http"
+	"os"
 	"time"
 	"web/helpers/mynegroni"
 	"web/models/user"
@@ -17,7 +18,7 @@ func LoginCallback(rw http.ResponseWriter, r *http.Request, render *render.Rende
 	}
 
 	config := c.Get("config").(mynegroni.Config)
-	db := config.GetDatabase("development")
+	db := config.GetDatabase(os.Getenv("ENV"))
 
 	p := context.Get(r, "oauth_profile").(mynegroni.OauthProfile)
 
