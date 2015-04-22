@@ -1,11 +1,11 @@
 <div class="container">
 	<div class="row margin-top-10 visible-xs-block">
-    	<img src="{{ (.Get "profile").Picture }}" class="img-responsive img-thumbnail center-block" />
+    	<img src="{{ (.Get "profile").Picture }}" class="img-responsive img-thumbnail center-block profile-image" />
     </div>
 
     <div class="row hidden-xs margin-top-30"></div>
 
-    <img src="{{ (.Get "profile").Picture }}" class="img-responsive img-thumbnail pull-left hidden-xs margin-right-20" />
+    <img src="{{ (.Get "profile").Picture }}" class="img-responsive img-thumbnail pull-left hidden-xs margin-right-20 profile-image" />
 
         <h1 class="profile-h1 margin-top-non-xs-0">{{ (.Get "profile").Name }}</h1>
         <p>{{ (.Get "profile").Email }}<br /><small>Last login: {{ (.Get "profile").LastLogin }}</small></p>
