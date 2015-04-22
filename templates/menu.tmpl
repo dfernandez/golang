@@ -8,11 +8,11 @@
         <span class="icon-bar"></span>
       </button>
       {{ if .Get "profile" }}
-      <a class="navbar-brand visible-xs-block" href="/profile"><img src="{{ (.Get "profile").Picture }}" width="20px" height="20px" /></a>
+      <a class="navbar-brand visible-xs-block" href="/profile"><img src="{{ (.Get "profile").Picture }}" width="30px" height="30px" /><span class="badge">{{ (.Get "profile").Unread }}</span></a>
       {{ else }}
-      <p class="navbar-text hidden-xs">Colernio</p>
       <a class="navbar-brand visible-xs-block" href="/login"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
       {{ end }}
+      <p class="navbar-text">Colernio</p>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
