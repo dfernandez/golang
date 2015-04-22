@@ -7,20 +7,20 @@ Website based on Negroni and Gorilla
 - mysql database
 
 ### Needed packages
-App settings
-- https://code.google.com/p/gcfg
-- 
-Negroni (+render +sessions)
-- https://github.com/codegangsta/negroni
-- https://github.com/unrolled/render
-- https://github.com/goincremental/negroni-sessions
-- 
-Gorilla router and context
-- https://github.com/gorilla/context
-- https://github.com/gorilla/mux
-- 
-Authentication using OAuth
-- https://golang.org/x/oauth2
-- 
-Mysql driver
-- https://github.com/go-sql-driver/mysql
+#### App settings
+code.google.com/p/gcfg
+
+#### Negroni (+render +sessions)
+github.com/codegangsta/negroni
+github.com/unrolled/render
+github.com/goincremental/negroni-sessions
+ 
+#### Gorilla router and context
+github.com/gorilla/context
+github.com/gorilla/mux
+
+#### Authentication using OAuth
+golang.org/x/oauth2
+
+#### Mysql driver
+github.com/go-sql-driver/mysql
