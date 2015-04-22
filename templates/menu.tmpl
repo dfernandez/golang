@@ -26,7 +26,7 @@
         <li><a href="/profile">{{ (.Get "profile").Name }} <span class="badge">{{ (.Get "profile").Unread }}</span></a></li>
         <li><a href="/logout">Logout &nbsp;<span class="glyphicon glyphicon glyphicon-off glyphicon-logout" aria-hidden="true"></span></a></li>
         {{ else }}
-        <li><a href="/login">Login</a></li>
+        <li><a href="/login">Login &nbsp;<span class="glyphicon glyphicon-user" aria-hidden="true"></span></a></li>
         {{ end }}
       </ul>
     </div>
