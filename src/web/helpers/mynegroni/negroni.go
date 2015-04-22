@@ -25,6 +25,9 @@ func New() *negroni.Negroni {
 
 	n := negroni.New()
 
+	// Stores application config
+	n.Use(Settings)
+
 	// Logger
 	logger := NewLogger()
 

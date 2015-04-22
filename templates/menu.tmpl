@@ -23,7 +23,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
       	{{ if .Get "profile" }}
-        <li><a href="/profile">{{ (.Get "profile").Name }} <span class="badge">2</span></a></li>
+        <li><a href="/profile">{{ (.Get "profile").Name }} <span class="badge">{{ (.Get "profile").Unread }}</span></a></li>
         <li><a href="/logout">Logout</a></li>
         {{ else }}
         <li><a href="/login">Login</a></li>

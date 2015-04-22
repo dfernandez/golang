@@ -6,16 +6,17 @@ import (
 	"fmt"
 	"github.com/codegangsta/negroni"
 	sessions "github.com/goincremental/negroni-sessions"
+	"github.com/gorilla/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/facebook"
 	"golang.org/x/oauth2/google"
 	"io/ioutil"
 	"net/http"
 	"os"
-	"web/models/user"
 )
 
 const authToken = "oauth_token"
+const oauthProfile = "oauth_profile"
 const userProfile = "profile"
 
 // Token struct.
@@ -23,7 +24,7 @@ type token struct {
 	oauth2.Token
 }
 
-type oauthProfile struct {
+type OauthProfile struct {
 	ID      string `json:"id"`
 	Name    string `json:"name"`
 	Email   string `json:"email"`
@@ -70,12 +71,6 @@ var BasicOAuth = func() negroni.HandlerFunc {
 			}
 		}
 
-		// Load user.Profile
-		ap := getProfile(r)
-		if ap != nil {
-			s.Set(userProfile, ap)
-		}
-
 		next(rw, r)
 	}
 }()
@@ -117,21 +112,19 @@ var GoogleOAuth = func() negroni.HandlerFunc {
 				defer response.Body.Close()
 				body, _ := ioutil.ReadAll(response.Body)
 
-				var profile oauthProfile
+				var profile OauthProfile
 				json.Unmarshal(body, &profile)
 
 				// Store the credentials in the session.
 				val, _ := json.Marshal(t)
 
-				// Save token and profile to session.
+				// Save session token.
 				s.Set(authToken, val)
 
-				// Load user.Profile
-				ap := setProfile(profile)
-				s.Set(userProfile, ap)
+				// Save oauth profile to context.
+				context.Set(r, oauthProfile, profile)
 
-				http.Redirect(rw, r, "/profile", http.StatusFound)
-
+				next(rw, r)
 			default:
 				next(rw, r)
 			}
@@ -178,7 +171,7 @@ var FacebookOAuth = func() negroni.HandlerFunc {
 				defer response.Body.Close()
 				body, _ := ioutil.ReadAll(response.Body)
 
-				var profile oauthProfile
+				var profile OauthProfile
 				json.Unmarshal(body, &profile)
 
 				// Get profile picture
@@ -194,15 +187,13 @@ var FacebookOAuth = func() negroni.HandlerFunc {
 				// Store the credentials in the session.
 				val, _ := json.Marshal(t)
 
-				// Save token and profile to session.
+				// Save session token.
 				s.Set(authToken, val)
 
-				// Load user.Profile
-				ap := setProfile(profile)
-				s.Set(userProfile, ap)
+				// Save oauth profile to context.
+				context.Set(r, oauthProfile, profile)
 
-				http.Redirect(rw, r, "/profile", http.StatusFound)
-
+				next(rw, r)
 			default:
 				next(rw, r)
 			}
@@ -213,30 +204,8 @@ var FacebookOAuth = func() negroni.HandlerFunc {
 }()
 
 func init() {
-	var user_profile user.Profile
-	gob.Register(user_profile)
-
-	var oauth_profile oauthProfile
+	var oauth_profile OauthProfile
 	gob.Register(oauth_profile)
-}
-
-func setProfile(p oauthProfile) (t *user.Profile) {
-	return &user.Profile{1, p.Name, p.Email, p.Profile, p.Picture}
-}
-
-func getProfile(r *http.Request) (t *user.Profile) {
-	s := sessions.GetSession(r)
-
-	if s.Get(userProfile) == nil {
-		return
-	}
-
-	// data contains oauth profile information.
-	data := s.Get(userProfile).(user.Profile)
-
-	// todo. store/retrieve user obj. from database.
-
-	return &user.Profile{data.ID, data.Name, data.Email, data.Profile, data.Picture}
 }
 
 func GetToken(r *http.Request) (t *token) {

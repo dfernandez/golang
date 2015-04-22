@@ -2,7 +2,6 @@
     <img src="{{ (.Get "profile").Picture }}" class="img-thumbnail profile-image pull-left" />
     <div>
         <h1 class="profile-h1">{{ (.Get "profile").Name }}</h1>
-        <p>{{ (.Get "profile").Email }}</p>
-        <p>{{ (.Get "profile").GetCreationDate }}</p>
+        <p>{{ (.Get "profile").Email }}<br /><small>Last login: {{ (.Get "profile").LastLogin }}</small></p>
     </div>
 </div>

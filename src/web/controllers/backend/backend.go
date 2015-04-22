@@ -13,8 +13,8 @@ func Controller(action func(http.ResponseWriter, *http.Request, *render.Render, 
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		render := context.Get(r, "Render").(*render.Render)
 		session := sessions.GetSession(r)
-		container := mynegroni.NewContainer(r)
+		context := mynegroni.NewContext(r)
 
-		action(rw, r, render, session, container)
+		action(rw, r, render, session, context)
 	})
 }
