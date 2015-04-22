@@ -5,7 +5,6 @@ import (
 	"github.com/codegangsta/negroni"
 	sessions "github.com/goincremental/negroni-sessions"
 	"github.com/goincremental/negroni-sessions/cookiestore"
-	_ "github.com/phyber/negroni-gzip/gzip"
 	"net/http"
 	"os"
 )
@@ -42,7 +41,6 @@ func New() *negroni.Negroni {
 	recovery := NewRecovery()
 
 	// Middleware
-	// n.Use(gzip.Gzip(gzip.DefaultCompression))
 	n.Use(logger)
 	n.Use(static)
 	n.Use(session)
