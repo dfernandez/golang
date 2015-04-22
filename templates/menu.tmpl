@@ -12,7 +12,7 @@
       {{ else }}
       <a class="navbar-brand visible-xs-block" href="/login"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
       {{ end }}
-      <p class="navbar-text">Colernio</p>
+      <p class="navbar-text"><a href="/">Colernio</a></p>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -24,7 +24,7 @@
       <ul class="nav navbar-nav navbar-right">
       	{{ if .Get "profile" }}
         <li><a href="/profile">{{ (.Get "profile").Name }} <span class="badge">{{ (.Get "profile").Unread }}</span></a></li>
-        <li><a href="/logout">Logout</a></li>
+        <li><a href="/logout">Logout &nbsp;<span class="glyphicon glyphicon glyphicon-off glyphicon-logout" aria-hidden="true"></span></a></li>
         {{ else }}
         <li><a href="/login">Login</a></li>
         {{ end }}

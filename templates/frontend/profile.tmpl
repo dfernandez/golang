@@ -1,7 +1,13 @@
-<div class="profile-container">
-    <img src="{{ (.Get "profile").Picture }}" class="img-thumbnail profile-image pull-left" />
-    <div>
-        <h1 class="profile-h1">{{ (.Get "profile").Name }}</h1>
-        <p>{{ (.Get "profile").Email }}<br /><small>Last login: {{ (.Get "profile").LastLogin }}</small></p>
+<div class="container">
+	<div class="row margin-top-10 visible-xs-block">
+    	<img src="{{ (.Get "profile").Picture }}" class="img-responsive img-thumbnail center-block" />
     </div>
+
+    <div class="row hidden-xs margin-top-30"></div>
+
+    <img src="{{ (.Get "profile").Picture }}" class="img-responsive img-thumbnail pull-left hidden-xs margin-right-20" />
+
+        <h1 class="profile-h1 margin-top-non-xs-0">{{ (.Get "profile").Name }}</h1>
+        <p>{{ (.Get "profile").Email }}<br /><small>Last login: {{ (.Get "profile").LastLogin }}</small></p>
+
 </div>
