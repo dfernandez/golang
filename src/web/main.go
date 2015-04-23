@@ -25,8 +25,10 @@ func main() {
 	// Negroni
 	n := mynegroni.New()
 
-	// Frontend
 	mainRouter := mux.NewRouter()
+	mainRouter.NotFoundHandler = http.HandlerFunc(mynegroni.NotFound)
+
+	// Frontend
 	mainRouter.Handle("/", frontend.Controller(frontend.Index))
 	mainRouter.Handle("/login", frontend.Controller(frontend.Login))
 	mainRouter.Handle("/login/google/callback", frontend.Controller(frontend.LoginCallback))
@@ -37,12 +39,16 @@ func main() {
 	))
 
 	// Backend
-	routerBack := mux.NewRouter()
-	routerBack.Handle("/backend", backend.Controller(backend.Index))
+	mainRouter.Handle("/backend", negroni.New(
+		backend.LoginRequired,
+		negroni.Wrap(backend.Controller(backend.Index)),
+	))
+	mainRouter.Handle("/backend/profiles", negroni.New(
+		backend.LoginRequired,
+		negroni.Wrap(backend.Controller(backend.Profiles)),
+	))
 
 	// Routers
-	mainRouter.Handle("/backend", routerBack)
-	mainRouter.NotFoundHandler = http.HandlerFunc(mynegroni.NotFound)
 	n.UseHandler(mainRouter)
 
 	// Run negroni run!

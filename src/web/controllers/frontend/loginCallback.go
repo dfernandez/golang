@@ -22,7 +22,7 @@ func LoginCallback(rw http.ResponseWriter, r *http.Request, render *render.Rende
 
 	p := context.Get(r, "oauth_profile").(mynegroni.OauthProfile)
 
-	profile := &user.Profile{Name: p.Name, Email: p.Email, Profile: p.Profile, Picture: p.Picture, LastLogin: time.Now().Format("2 Jan 2006 - 15:04")}
+	profile := &user.Profile{Name: p.Name, Email: p.Email, Profile: p.Profile, Picture: p.Picture, LastLogin: time.Now().Local()}
 	profile.Upsert(db)
 
 	s.Set("profile", profile)

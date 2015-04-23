@@ -1,0 +1,18 @@
+<div class="container">
+	<table class="table table-striped margin-top-10">
+	<tr>
+		<th>Id</th>
+		<th>Name</th>
+		<th>Email</th>
+		<th>First login</th>
+	</tr>
+	{{ range $index, $profile := .Get "profiles" }}
+	<tr>
+		<td>{{ $profile.ID }}</td>
+		<td>{{ $profile.Name }}</td>
+		<td>{{ $profile.Email }}</td>
+		<td>{{ $profile.FirstLogin }}</td>
+	</tr>
+	{{ end }}
+	</table>
+</div>
