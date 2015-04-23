@@ -1,7 +1,9 @@
 package mynegroni
 
 import (
+	"database/sql"
 	"github.com/codegangsta/negroni"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/context"
 	"net/http"
 )
@@ -24,8 +26,16 @@ type Config struct {
 	}
 }
 
-func (c *Config) GetDatabase(env string) interface{} {
-	return c.Database[env]
+func (c *Config) GetDatabase(env string) *sql.DB {
+	dbConfig := c.Database[env]
+
+	db, err := sql.Open(dbConfig.Connector, dbConfig.Dns)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return db
 }
 
 var Settings = func() negroni.HandlerFunc {

@@ -30,23 +30,9 @@ type dbParams struct {
 var db *sql.DB
 var err error
 
-func initDb(dbConfig interface{}) {
-
-	config := dbConfig.(*struct {
-		Connector string
-		Dns       string
-	})
-
-	db, err = sql.Open(config.Connector, config.Dns)
-
-	if err != nil {
-		panic(err)
-	}
-}
-
 // Update saves user profile to database.
-func (p *Profile) Upsert(dbConfig interface{}) {
-	initDb(dbConfig)
+func (p *Profile) Upsert(db *sql.DB) {
+
 }
 
 func (p *Profile) Unread() int {
