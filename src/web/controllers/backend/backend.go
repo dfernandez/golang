@@ -6,7 +6,9 @@ import (
 	sessions "github.com/goincremental/negroni-sessions"
 	"github.com/gorilla/context"
 	"github.com/unrolled/render"
+	"log"
 	"net/http"
+	"os"
 	"web/helpers/mynegroni"
 	"web/models/user"
 )
@@ -32,12 +34,16 @@ var LoginRequired = func() negroni.HandlerFunc {
 		} else {
 
 			session := sessions.GetSession(r)
+			content := mynegroni.NewContext(r)
 			profile := session.Get("profile").(user.Profile)
 
-			if !profile.IsAdmin {
-				content := mynegroni.NewContext(r)
+			config := content.Get("config").(mynegroni.Config)
+			db := config.GetDatabase(os.Getenv("ENV"))
 
+			if !profile.IsAdmin(db) {
 				userProfile(content, session)
+
+				log.Printf("UNAUTHORIZED ACCESS: %s", profile.Email)
 
 				renderer := mynegroni.NewRender()
 				renderer.Render.HTML(rw, http.StatusForbidden, "error403", content)

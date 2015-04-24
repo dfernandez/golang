@@ -15,6 +15,7 @@ const createdAtFormat = "2006-01-02 15:04:01"
 type Profiler interface {
 	GetFirstLogin() string
 	GetLastLogin() string
+	IsAdmin() bool
 	Upsert() string
 	Unread() int
 }
@@ -29,7 +30,6 @@ type Profile struct {
 	FirstLogin string
 	LastLogin  time.Time
 	CreatedAt  time.Time
-	IsAdmin    bool
 }
 
 type dbParams struct {
@@ -63,10 +63,12 @@ func GetProfiles(db *sql.DB) map[int]Profile {
 	for rows.Next() {
 		rows.Scan(&id, &name, &email, &profile, &picture, &createdAt)
 		time.Parse(createdAtFormat, createdAt)
+
 		p := Profile{ID: id, Name: name, Email: email, Profile: profile, Picture: picture}
 		firstLogin, _ := time.Parse(createdAtFormat, createdAt)
 		p.FirstLogin = firstLogin.Format(firstLoginFormat)
 		profiles[i] = p
+
 		i++
 	}
 
@@ -79,6 +81,14 @@ func (p *Profile) GetFirstLogin() string {
 
 func (p *Profile) GetLastLogin() string {
 	return p.LastLogin.Format(lastLoginFormat)
+}
+
+func (p *Profile) IsAdmin(db *sql.DB) bool {
+	var isAdmin bool
+
+	err = db.QueryRow("select is_admin from user where email like ?", p.Email).Scan(&isAdmin)
+
+	return isAdmin
 }
 
 // Update saves user profile to database.
@@ -94,10 +104,9 @@ func (p *Profile) Upsert(db *sql.DB) {
 	}
 
 	var id int
-	var isAdmin bool
 	var createdAt string
 
-	err = db.QueryRow("select id, created_at, is_admin from user where email like ?", p.Email).Scan(&id, &createdAt, &isAdmin)
+	err = db.QueryRow("select id, created_at from user where email like ?", p.Email).Scan(&id, &createdAt)
 
 	switch {
 	case err == sql.ErrNoRows:
@@ -111,7 +120,6 @@ func (p *Profile) Upsert(db *sql.DB) {
 		panic(err)
 	default:
 		p.ID = id
-		p.IsAdmin = isAdmin
 		p.CreatedAt, _ = time.Parse(createdAtFormat, createdAt)
 	}
 

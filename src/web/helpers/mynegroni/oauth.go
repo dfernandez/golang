@@ -11,6 +11,7 @@ import (
 	"golang.org/x/oauth2/facebook"
 	"golang.org/x/oauth2/google"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 )
@@ -98,13 +99,22 @@ var GoogleOAuth = func() negroni.HandlerFunc {
 				s := sessions.GetSession(r)
 
 				if err != "" {
-					s.AddFlash(err)
+					log.Printf("OAUTH ERROR: %s", err)
+					s.AddFlash("Authentication error", "oauth")
 					http.Redirect(rw, r, "/login", http.StatusFound)
 					return
 				}
 
 				code := r.URL.Query().Get("code")
-				t, _ := oauth["google"].Exchange(oauth2.NoContext, code)
+				t, oerr := oauth["google"].Exchange(oauth2.NoContext, code)
+
+				if oerr != nil {
+					log.Printf("OAUTH ERROR: %s", oerr)
+					s.AddFlash("Authentication error", "oauth")
+					http.Redirect(rw, r, "/login", http.StatusFound)
+					return
+				}
+
 				client := oauth["google"].Client(oauth2.NoContext, t)
 
 				// Get profile
@@ -156,13 +166,22 @@ var FacebookOAuth = func() negroni.HandlerFunc {
 				s := sessions.GetSession(r)
 
 				if err != "" {
-					s.AddFlash(err)
+					log.Printf("OAUTH ERROR: %s", err)
+					s.AddFlash("Authentication error", "oauth")
 					http.Redirect(rw, r, "/login", http.StatusFound)
 					return
 				}
 
 				code := r.URL.Query().Get("code")
-				t, _ := oauth["facebook"].Exchange(oauth2.NoContext, code)
+				t, oerr := oauth["facebook"].Exchange(oauth2.NoContext, code)
+
+				if oerr != nil {
+					log.Printf("OAUTH ERROR: %s", oerr)
+					s.AddFlash("Authentication error", "oauth")
+					http.Redirect(rw, r, "/login", http.StatusFound)
+					return
+				}
+
 				client := oauth["facebook"].Client(oauth2.NoContext, t)
 
 				// Get profile

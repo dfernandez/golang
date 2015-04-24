@@ -9,5 +9,7 @@ import (
 
 func Login(rw http.ResponseWriter, r *http.Request, render *render.Render, s sessions.Session, c *mynegroni.Content) {
 
+	c.Set("errors", s.Flashes("oauth"))
+
 	render.HTML(rw, http.StatusOK, "frontend/login", c)
 }

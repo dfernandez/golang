@@ -84,3 +84,7 @@ body {
 .glyphicon-logout {
   font-size: 12px;
 }
+.padding-sides-15 {
+  padding-right: 15px;
+  padding-left: 15px;
+}
