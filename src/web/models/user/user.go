@@ -72,10 +72,10 @@ func GetProfiles(db *sql.DB) map[int]Profile {
 		firstLoginTime, err1 := time.Parse(dbDateTime, firstLogin)
 		lastLoginTime, err2 := time.Parse(dbDateTime, lastLogin)
 
-		if err1 != nil {
+		if err1 == nil {
 			p.FormatedFirstLogin = firstLoginTime.Format(dateFormat)
 		}
-		if err2 != nil {
+		if err2 == nil {
 			p.FormatedLastLogin = lastLoginTime.Format(dateFormat)
 		}
 
