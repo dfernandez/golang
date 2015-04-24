@@ -5,6 +5,7 @@
 	<th>Name</th>
 	<th class="hidden-xs">Email</th>
 	<th>First login</th>
+	<ht>Last login</th>
 	<th>Is admin</th>
 </tr>
 {{ range $index, $profile := .Get "profiles" }}
@@ -12,7 +13,8 @@
 	<td>{{ $profile.ID }}</td>
 	<td>{{ $profile.Name }}</td>
 	<td class="hidden-xs">{{ $profile.Email }}</td>
-	<td>{{ $profile.FirstLogin }}</td>
+	<td>{{ $profile.FormatedFirstLogin }}</td>
+	<td>{{ $profile.FormatedLastLogin }}</td>
 	<td>{{ if $profile.Admin }}<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{{ end }}</td>
 </tr>
 {{ end }}

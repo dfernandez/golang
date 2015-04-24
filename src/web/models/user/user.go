@@ -7,9 +7,9 @@ import (
 	"time"
 )
 
-const firstLoginFormat = "02 Apr 2006"
-const lastLoginFormat = "02 Apr 2006 15:04:01"
-const createdAtFormat = "2006-01-02 15:04:01"
+const dateFormat = "02 Apr 2006"
+const timeFormat = "02 Apr 2006 15:04:01"
+const dbDateTime = "2006-01-02 15:04:01"
 
 // UserProfile interface that will hold user struct.
 type Profiler interface {
@@ -22,15 +22,16 @@ type Profiler interface {
 
 // User profile struct.
 type Profile struct {
-	ID         int
-	Name       string
-	Email      string
-	Profile    string
-	Picture    string
-	FirstLogin string
-	LastLogin  time.Time
-	CreatedAt  time.Time
-	Admin      bool
+	ID                 int
+	Name               string
+	Email              string
+	Profile            string
+	Picture            string
+	FirstLogin         time.Time
+	LastLogin          time.Time
+	FormatedFirstLogin string
+	FormatedLastLogin  string
+	Admin              bool
 }
 
 type dbParams struct {
@@ -44,7 +45,7 @@ var err error
 func GetProfiles(db *sql.DB) map[int]Profile {
 	profiles := make(map[int]Profile)
 
-	rows, err := db.Query("select id, name, email, profile, picture, created_at, is_admin from user order by is_admin desc, name asc")
+	rows, err := db.Query("select id, name, email, profile, picture, firstLogin, lastLogin, isAdmin from user order by isAdmin desc, name asc")
 
 	if err != nil {
 		panic(err)
@@ -59,16 +60,21 @@ func GetProfiles(db *sql.DB) map[int]Profile {
 	var email string
 	var profile string
 	var picture string
-	var createdAt string
+	var firstLogin string
+	var lastLogin string
 	var admin bool
 
 	for rows.Next() {
-		rows.Scan(&id, &name, &email, &profile, &picture, &createdAt, &admin)
-		time.Parse(createdAtFormat, createdAt)
+		rows.Scan(&id, &name, &email, &profile, &picture, &firstLogin, &lastLogin, &admin)
 
 		p := Profile{ID: id, Name: name, Email: email, Profile: profile, Picture: picture, Admin: admin}
-		firstLogin, _ := time.Parse(createdAtFormat, createdAt)
-		p.FirstLogin = firstLogin.Format(firstLoginFormat)
+
+		firstLoginTime, _ := time.Parse(dbDateTime, firstLogin)
+		lastLoginTime, _ := time.Parse(dbDateTime, lastLogin)
+
+		p.FormatedFirstLogin = firstLoginTime.Format(dateFormat)
+		p.FormatedLastLogin = lastLoginTime.Format(dateFormat)
+
 		profiles[i] = p
 
 		i++
@@ -77,18 +83,10 @@ func GetProfiles(db *sql.DB) map[int]Profile {
 	return profiles
 }
 
-func (p *Profile) GetFirstLogin() string {
-	return p.CreatedAt.Format(firstLoginFormat)
-}
-
-func (p *Profile) GetLastLogin() string {
-	return p.LastLogin.Format(lastLoginFormat)
-}
-
 func (p *Profile) IsAdmin(db *sql.DB) bool {
 	var isAdmin bool
 
-	err = db.QueryRow("select is_admin from user where email like ?", p.Email).Scan(&isAdmin)
+	err = db.QueryRow("select isAdmin from user where email like ?", p.Email).Scan(&isAdmin)
 
 	return isAdmin
 }
@@ -107,23 +105,42 @@ func (p *Profile) Upsert(db *sql.DB) {
 
 	var id int
 	var admin bool
-	var createdAt string
+	var firstLogin string
 
-	err = db.QueryRow("select id, created_at, is_admin from user where email like ?", p.Email).Scan(&id, &createdAt, &admin)
+	err = db.QueryRow("select id, firstLogin, isAdmin from user where email like ?", p.Email).Scan(&id, &firstLogin, &admin)
 
 	switch {
 	case err == sql.ErrNoRows:
-		result, err = db.Exec("insert into user set name = ?, email = ?, profile = ?, picture = ?, created_at = ?", p.Name, p.Email, p.Profile, p.Picture, time.Now().Local().Format(createdAtFormat))
+
+		firstLogin = time.Now().Local().Format(dbDateTime)
+
+		result, err = db.Exec("insert into user set name = ?, email = ?, profile = ?, picture = ?, firstLogin = ?", p.Name, p.Email, p.Profile, p.Picture, firstLogin)
 		if err != nil {
 			panic(err)
 		}
+
+		firstLogin := time.Now().Local().Format(dbDateTime)
+		firstLoginTime, _ := time.Parse(dbDateTime, firstLogin)
+		p.FormatedFirstLogin = firstLoginTime.Format(dateFormat)
+		p.FormatedLastLogin = "-"
+
 		lastInsertId, _ := result.LastInsertId()
 		p.ID = int(lastInsertId)
 	case err != nil:
 		panic(err)
 	default:
 		p.ID = id
-		p.CreatedAt, _ = time.Parse(createdAtFormat, createdAt)
+
+		lastLogin := time.Now().Local().Format(dbDateTime)
+
+		firstLoginTime, _ := time.Parse(dbDateTime, firstLogin)
+		lastLoginTime, _ := time.Parse(dbDateTime, lastLogin)
+
+		p.FormatedFirstLogin = firstLoginTime.Format(dateFormat)
+		p.FormatedLastLogin = lastLoginTime.Format(dateFormat)
+
+		db.Exec("update user set lastLogin = ? where id = ?", lastLoginTime.Format(dbDateTime), p.ID)
+
 		p.Admin = admin
 	}
 

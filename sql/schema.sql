@@ -4,8 +4,9 @@ create table user (
 	`email` varchar(120) not null unique,
 	`profile` varchar(120),
 	`picture` varchar(120),
-	`is_admin` bool default 0,
-	`created_at` datetime not null,
+	`isAdmin` bool default 0,
+	`firstLogin` datetime not null,
+	`lastLogin` datetime,
 	primary key (`id`)
 )
 default charset = utf8;
