@@ -24,6 +24,9 @@
       <ul class="nav navbar-nav navbar-right">
       	{{ if .Get "profile" }}
         <li><a href="/profile">{{ (.Get "profile").Name }} <span class="badge">{{ (.Get "profile").Unread }}</span></a></li>
+        {{ if (.Get "profile").Admin }}
+        <li><a href="/backend">Backend</a></li>
+        {{ end }}
         <li><a href="/logout">Logout &nbsp;<span class="glyphicon glyphicon glyphicon-off glyphicon-logout" aria-hidden="true"></span></a></li>
         {{ else }}
         <li><a href="/login">Login &nbsp;<span class="glyphicon glyphicon-user" aria-hidden="true"></span></a></li>

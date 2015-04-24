@@ -21,6 +21,8 @@ func Controller(action func(http.ResponseWriter, *http.Request, *render.Render, 
 
 		userProfile(content, session)
 
+		content.Set("backend", true)
+
 		action(rw, r, render, session, content)
 	})
 }

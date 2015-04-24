@@ -30,6 +30,7 @@ type Profile struct {
 	FirstLogin string
 	LastLogin  time.Time
 	CreatedAt  time.Time
+	Admin      bool
 }
 
 type dbParams struct {
@@ -43,7 +44,7 @@ var err error
 func GetProfiles(db *sql.DB) map[int]Profile {
 	profiles := make(map[int]Profile)
 
-	rows, err := db.Query("select id, name, email, profile, picture, created_at from user order by id asc")
+	rows, err := db.Query("select id, name, email, profile, picture, created_at, is_admin from user order by is_admin desc, name asc")
 
 	if err != nil {
 		panic(err)
@@ -59,12 +60,13 @@ func GetProfiles(db *sql.DB) map[int]Profile {
 	var profile string
 	var picture string
 	var createdAt string
+	var admin bool
 
 	for rows.Next() {
-		rows.Scan(&id, &name, &email, &profile, &picture, &createdAt)
+		rows.Scan(&id, &name, &email, &profile, &picture, &createdAt, &admin)
 		time.Parse(createdAtFormat, createdAt)
 
-		p := Profile{ID: id, Name: name, Email: email, Profile: profile, Picture: picture}
+		p := Profile{ID: id, Name: name, Email: email, Profile: profile, Picture: picture, Admin: admin}
 		firstLogin, _ := time.Parse(createdAtFormat, createdAt)
 		p.FirstLogin = firstLogin.Format(firstLoginFormat)
 		profiles[i] = p
@@ -104,9 +106,10 @@ func (p *Profile) Upsert(db *sql.DB) {
 	}
 
 	var id int
+	var admin bool
 	var createdAt string
 
-	err = db.QueryRow("select id, created_at from user where email like ?", p.Email).Scan(&id, &createdAt)
+	err = db.QueryRow("select id, created_at, is_admin from user where email like ?", p.Email).Scan(&id, &createdAt, &admin)
 
 	switch {
 	case err == sql.ErrNoRows:
@@ -121,6 +124,7 @@ func (p *Profile) Upsert(db *sql.DB) {
 	default:
 		p.ID = id
 		p.CreatedAt, _ = time.Parse(createdAtFormat, createdAt)
+		p.Admin = admin
 	}
 
 }

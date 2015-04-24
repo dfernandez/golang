@@ -12,19 +12,31 @@
 </head>
 <body>
 	<div class="container menu-container">
-	  <div class="row">
-	    {{ template "menu" . }}
+	  
+	  {{ template "menu" . }}	
+
+	  <div class="margin-top-10">
+
+		{{ if .Get "backend" }}
+		<div class="row margin-top-20">
+			<div class="col-md-2">{{ template "backend" . }}</div>
+			<div class="col-md-10">{{ yield }}</div>
+		</div>
+		{{ else }}
+
+			{{ yield }}
+
+		{{ end }}
+
 	  </div>
-	  <div class="row main-container">
-	  	{{ yield }}
-	  </div>
+
 	</div>
 
-    	<footer class="footer">
-      		<div class="container footer-container">
-        		<p class="text-muted text-right">colernio.com</p>
-      		</div>
-    	</footer>
+	<footer class="footer">
+  		<div class="container footer-container">
+    		<p class="text-muted text-right">colernio.com</p>
+  		</div>
+	</footer>
 
 	<script src="/js/jquery.min.js"></script>
 	<script src="/js/bootstrap.min.js"></script>
