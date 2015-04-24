@@ -69,11 +69,15 @@ func GetProfiles(db *sql.DB) map[int]Profile {
 
 		p := Profile{ID: id, Name: name, Email: email, Profile: profile, Picture: picture, Admin: admin}
 
-		firstLoginTime, _ := time.Parse(dbDateTime, firstLogin)
-		lastLoginTime, _ := time.Parse(dbDateTime, lastLogin)
+		firstLoginTime, err1 := time.Parse(dbDateTime, firstLogin)
+		lastLoginTime, err2 := time.Parse(dbDateTime, lastLogin)
 
-		p.FormatedFirstLogin = firstLoginTime.Format(dateFormat)
-		p.FormatedLastLogin = lastLoginTime.Format(dateFormat)
+		if err1 != nil {
+			p.FormatedFirstLogin = firstLoginTime.Format(dateFormat)
+		}
+		if err2 != nil {
+			p.FormatedLastLogin = lastLoginTime.Format(dateFormat)
+		}
 
 		profiles[i] = p
 
