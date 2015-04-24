@@ -55,16 +55,17 @@ func GetProfiles(db *sql.DB) map[int]Profile {
 
 	i := 0
 
-	var id int
-	var name string
-	var email string
-	var profile string
-	var picture string
-	var firstLogin string
-	var lastLogin string
-	var admin bool
-
 	for rows.Next() {
+
+		var id int
+		var name string
+		var email string
+		var profile string
+		var picture string
+		var firstLogin string
+		var lastLogin string
+		var admin bool
+
 		rows.Scan(&id, &name, &email, &profile, &picture, &firstLogin, &lastLogin, &admin)
 
 		p := Profile{ID: id, Name: name, Email: email, Profile: profile, Picture: picture, Admin: admin}
