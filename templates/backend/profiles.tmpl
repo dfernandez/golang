@@ -1,8 +1,9 @@
-<table class="table table-striped">
+<div class="row visible-xs-block margin-top-10"></div>
+<table class="table table-condensed table-striped">
 <tr>
 	<th>Id</th>
 	<th>Name</th>
-	<th>Email</th>
+	<th class="hidden-xs">Email</th>
 	<th>First login</th>
 	<th>Is admin</th>
 </tr>
@@ -10,7 +11,7 @@
 <tr>
 	<td>{{ $profile.ID }}</td>
 	<td>{{ $profile.Name }}</td>
-	<td>{{ $profile.Email }}</td>
+	<td class="hidden-xs">{{ $profile.Email }}</td>
 	<td>{{ $profile.FirstLogin }}</td>
 	<td>{{ if $profile.Admin }}<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{{ end }}</td>
 </tr>
