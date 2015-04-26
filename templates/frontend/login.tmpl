@@ -3,7 +3,7 @@
 		<a class="btn btn-primary btn-block" href="/login/facebook" role="button">Sign in with Facebook</a>
 		<a class="btn btn-danger btn-block" href="/login/google" role="button">Sign in with Google</a>
 	
-		<div class="col-sm-6 col-sm-offset-3 row margin-top-10 padding-sides-15">
+		<div class="row margin-top-10 padding-sides-15">
 			{{ range $index, $err := .Get "errors" }}
 			<pre class="bg-danger text-center">{{ $err }}</pre>
 			{{ end }}

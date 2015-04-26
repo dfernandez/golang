@@ -33,7 +33,11 @@ func main() {
 	mainRouter.Handle("/login", frontend.Controller(frontend.Login))
 	mainRouter.Handle("/login/google/callback", frontend.Controller(frontend.LoginCallback))
 	mainRouter.Handle("/login/facebook/callback", frontend.Controller(frontend.LoginCallback))
-	mainRouter.Handle("/profile", negroni.New(
+	mainRouter.Handle("/user", negroni.New(
+		frontend.LoginRequired,
+		negroni.Wrap(frontend.Controller(frontend.Dashboard)),
+	))
+	mainRouter.Handle("/user/profile", negroni.New(
 		frontend.LoginRequired,
 		negroni.Wrap(frontend.Controller(frontend.Profile)),
 	))

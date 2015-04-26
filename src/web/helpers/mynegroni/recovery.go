@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"web/models/user"
 )
 
 // Recovery is a Negroni middleware that recovers from any panics and writes a 500 if there was one.
@@ -24,7 +23,7 @@ func (rec *MyRecovery) ServeHTTP(rw http.ResponseWriter, r *http.Request, next h
 	session := sessions.GetSession(r)
 	content := NewContext(r)
 
-	getUserProfile(content, session)
+	GetUserProfile(content, session)
 
 	defer func() {
 		if err := recover(); err != nil {
@@ -36,14 +35,4 @@ func (rec *MyRecovery) ServeHTTP(rw http.ResponseWriter, r *http.Request, next h
 	}()
 
 	next(rw, r)
-}
-
-func getUserProfile(content *Content, session sessions.Session) {
-	if session.Get("profile") == nil {
-		return
-	}
-
-	p := session.Get("profile").(user.Profile)
-
-	content.Set("profile", &p)
 }

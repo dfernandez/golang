@@ -1,12 +1,15 @@
-<div class="container">
-	<div class="row visible-xs-block">
-    	<img src="{{ (.Get "profile").Picture }}" class="img-responsive img-thumbnail center-block profile-image" />
-    </div>
+<div class="row margin-top-20">
+	{{ template "frontend/user" . }}
+	<div class="col-md-10">
+		<div class="row visible-xs-block">
+	    	<img src="{{ (.Get "profile").Picture }}" class="img-responsive img-thumbnail center-block profile-image" />
+	    </div>
 
-    <div class="row hidden-xs margin-top-20"></div>
+	    <div class="row hidden-xs"></div>
 
-    <img src="{{ (.Get "profile").Picture }}" class="img-responsive img-thumbnail pull-left hidden-xs margin-right-20 profile-image" />
+	    <img src="{{ (.Get "profile").Picture }}" class="img-responsive img-thumbnail pull-left hidden-xs margin-right-20 profile-image" />
 
-    <h1 class="profile-h1 margin-top-non-xs-0">{{ (.Get "profile").Name }}</h1>
-    <p>{{ (.Get "profile").Email }}<br /><small>First login: {{ (.Get "profile").FormatedFirstLogin }}<br />Last login: {{ (.Get "profile").FormatedLastLogin }}</small></p>
+	    <h1 class="profile-h1 margin-top-non-xs-0">{{ (.Get "profile").Name }}</h1>
+	    <p>{{ (.Get "profile").Email }}<br /><small>First login: {{ (.Get "profile").FormatedFirstLogin }}<br />Last login: {{ (.Get "profile").FormatedLastLogin }}</small></p>
+	</div>
 </div>

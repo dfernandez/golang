@@ -26,5 +26,5 @@ func LoginCallback(rw http.ResponseWriter, r *http.Request, render *render.Rende
 
 	s.Set("profile", profile)
 
-	http.Redirect(rw, r, "/profile", http.StatusFound)
+	http.Redirect(rw, r, "/user", http.StatusFound)
 }

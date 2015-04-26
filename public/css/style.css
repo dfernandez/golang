@@ -44,11 +44,20 @@ body {
     text-align: center;
     font-weight: bold;
   }
+  .menu-backend {
+    border-bottom: solid 1px black;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
 }
 
 @media (min-width:768px) {
   .margin-top-non-xs-0 {
     margin-top: 0px;
+  }
+  .menu-backend {
+    border-right: solid 1px black;
+    padding-right: 30px;
   }
 }
 
@@ -91,7 +100,6 @@ body {
   padding-right: 15px;
   padding-left: 15px;
 }
-.menu-backend {
-  width: 150px;
-  float: left;
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+  background-color: #333;
 }
