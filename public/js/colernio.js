@@ -10,7 +10,7 @@ $(document).ready(function(){
 
 		// Grab close button to save cookie
 	    $('.close-cookie').click(function( e ){
-	        Cookies.set('colernio-cookie-legal', true, { expires: 7, path: '/' });
+	        Cookies.set('colernio-cookie-legal', true, { expires: 7, path: '/', secure: true });
 	    });
 	}
 })

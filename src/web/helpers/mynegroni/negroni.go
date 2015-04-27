@@ -35,7 +35,16 @@ func New() *negroni.Negroni {
 	static := negroni.NewStatic(http.Dir("public"))
 
 	// Sessions
-	session := sessions.Sessions("mysession", cookiestore.New([]byte("myapp")))
+	var cookieOptions sessions.Options
+
+	if os.Getenv("ENV") == "production" {
+		cookieOptions.Secure = true
+		cookieOptions.HTTPOnly = true
+	}
+
+	cookie := cookiestore.New([]byte("colernio"))
+	cookie.Options(cookieOptions)
+	session := sessions.Sessions("colernio", cookie)
 
 	// Render
 	render := NewRender()
