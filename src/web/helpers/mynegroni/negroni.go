@@ -38,6 +38,8 @@ func New() *negroni.Negroni {
 	var cookieOptions sessions.Options
 
 	if os.Getenv("ENV") == "production" {
+        cookieOptions.Path = "/"
+        cookieOptions.MaxAge = 604800
 		cookieOptions.Secure = true
 		cookieOptions.HTTPOnly = true
 	}
