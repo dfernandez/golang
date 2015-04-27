@@ -103,3 +103,14 @@ body {
 .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
   background-color: #333;
 }
+
+.cookies-legal {
+  margin-bottom: 10px;
+}
+.cookies-legal-navbar {
+    background-color: transparent;
+    background:transparent;
+    border: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
