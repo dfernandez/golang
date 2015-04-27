@@ -42,6 +42,8 @@ func New() *negroni.Negroni {
         cookieOptions.MaxAge = 604800
 		cookieOptions.Secure = true
 		cookieOptions.HTTPOnly = true
+	} else {
+		cookieOptions.Path = "/"
 	}
 
 	cookie := cookiestore.New([]byte("colernio"))
