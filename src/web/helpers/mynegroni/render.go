@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/context"
 	"github.com/unrolled/render"
 	"net/http"
+	"os"
 )
 
 type MyRender struct {
@@ -12,7 +13,15 @@ type MyRender struct {
 
 func NewRender() *MyRender {
 
-	render := render.New(render.Options{Layout: "layout"})
+	var options render.Options
+
+	if os.Getenv("ENV") == "development" {
+		options = render.Options{Layout: "layout", IsDevelopment: true}
+	} else {
+		options = render.Options{Layout: "layout"}
+	}
+
+	render := render.New(options)
 
 	return &MyRender{render}
 }
