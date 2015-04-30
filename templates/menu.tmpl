@@ -8,7 +8,7 @@
         <span class="icon-bar"></span>
       </button>
       {{ if .Get "profile" }}
-      <a class="navbar-brand visible-xs-block" href="/profile"><img src="{{ (.Get "profile").Picture }}" width="30px" height="30px" /><span class="badge">{{ (.Get "profile").Unread }}</span></a>
+      <a class="navbar-brand visible-xs-block" href="/user"><img src="{{ (.Get "profile").Picture }}" width="30px" height="30px" /><span class="badge">{{ (.Get "profile").Unread }}</span></a>
       {{ else }}
       <a class="navbar-brand visible-xs-block" href="/login"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
       {{ end }}
