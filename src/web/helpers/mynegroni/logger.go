@@ -20,6 +20,12 @@ const LOG_ERROR = "ERROR"
 
 func LogMessage(r *http.Request, errorType string, errorMessage string) {
 
+	f, err := os.OpenFile("log/messages", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Printf("%s", err)
+	}
+	defer f.Close()
+
 	remoteAddr := r.Header.Get("X-Forwarded-For")
 	if remoteAddr == "" {
 		remoteAddr = r.RemoteAddr
@@ -35,6 +41,9 @@ func LogMessage(r *http.Request, errorType string, errorMessage string) {
 
 	l.Printf("%-25s | %-7s | %s", remoteAddr, errorType, errorMessage)
 	color.Unset()
+
+	log.SetOutput(f)
+	log.Printf("%-25s | %-7s | %s", remoteAddr, errorType, errorMessage)
 }
 
 // NewLogger returns a new Logger instance
