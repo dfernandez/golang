@@ -20,6 +20,8 @@ const LOG_ERROR = "ERROR"
 
 func LogMessage(r *http.Request, errorType string, errorMessage string) {
 
+	logTime := time.Now().Format("2006-01-02 15:04:01")
+
 	f, err := os.OpenFile("log/messages", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Printf("%s", err)
@@ -43,7 +45,7 @@ func LogMessage(r *http.Request, errorType string, errorMessage string) {
 	color.Unset()
 
 	log.SetOutput(f)
-	log.Printf("%-25s | %-7s | %s", remoteAddr, errorType, errorMessage)
+	log.Printf("%s - %s - %s - %s - %s: %s", logTime, remoteAddr, r.Method, r.URL.Path, errorType, errorMessage)
 }
 
 // NewLogger returns a new Logger instance

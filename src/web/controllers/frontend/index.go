@@ -9,7 +9,5 @@ import (
 
 func Index(rw http.ResponseWriter, r *http.Request, render *render.Render, s sessions.Session, c *mynegroni.Content) {
 
-	panic("hola")
-
 	render.HTML(rw, http.StatusOK, "frontend/index", c)
 }
