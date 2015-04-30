@@ -11,15 +11,6 @@ const dateFormat = "02 Apr 2006"
 const timeFormat = "02 Apr 2006 15:04:01"
 const dbDateTime = "2006-01-02 15:04:01"
 
-// UserProfile interface that will hold user struct.
-type Profiler interface {
-	GetFirstLogin() string
-	GetLastLogin() string
-	IsAdmin() bool
-	Upsert() string
-	Unread() int
-}
-
 // User profile struct.
 type Profile struct {
 	ID                 int

@@ -33,24 +33,14 @@ func main() {
 	mainRouter.Handle("/login", frontend.Controller(frontend.Login))
 	mainRouter.Handle("/login/google/callback", frontend.Controller(frontend.LoginCallback))
 	mainRouter.Handle("/login/facebook/callback", frontend.Controller(frontend.LoginCallback))
-	mainRouter.Handle("/user", negroni.New(
-		frontend.LoginRequired,
-		negroni.Wrap(frontend.Controller(frontend.Dashboard)),
-	))
-	mainRouter.Handle("/user/profile", negroni.New(
-		frontend.LoginRequired,
-		negroni.Wrap(frontend.Controller(frontend.Profile)),
-	))
+
+	// User profile
+	mainRouter.Handle("/user", negroni.New(frontend.LoginRequired, negroni.Wrap(frontend.Controller(frontend.Dashboard))))
+	mainRouter.Handle("/user/profile", negroni.New(frontend.LoginRequired, negroni.Wrap(frontend.Controller(frontend.Profile))))
 
 	// Backend
-	mainRouter.Handle("/backend", negroni.New(
-		backend.LoginRequired,
-		negroni.Wrap(backend.Controller(backend.Index)),
-	))
-	mainRouter.Handle("/backend/profiles", negroni.New(
-		backend.LoginRequired,
-		negroni.Wrap(backend.Controller(backend.Profiles)),
-	))
+	mainRouter.Handle("/backend", negroni.New(backend.LoginRequired, negroni.Wrap(backend.Controller(backend.Index))))
+	mainRouter.Handle("/backend/profiles", negroni.New(backend.LoginRequired, negroni.Wrap(backend.Controller(backend.Profiles))))
 
 	// Routers
 	n.UseHandler(mainRouter)

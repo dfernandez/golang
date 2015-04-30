@@ -30,5 +30,5 @@ func (l *Logger) ServeHTTP(rw http.ResponseWriter, r *http.Request, next http.Ha
 	}
 
 	res := rw.(negroni.ResponseWriter)
-	l.Printf("%s %s %s %v %s in %v", remoteAddr, r.Method, r.URL.Path, res.Status(), http.StatusText(res.Status()), time.Since(start))
+	l.Printf("%-25s | %-7s | %-60s | %v %-25s | %12v", remoteAddr, r.Method, r.URL.Path, res.Status(), http.StatusText(res.Status()), time.Since(start))
 }

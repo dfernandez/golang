@@ -1,6 +1,7 @@
 package mynegroni
 
 import (
+	"github.com/fatih/color"
 	sessions "github.com/goincremental/negroni-sessions"
 	"log"
 	"net/http"
@@ -27,7 +28,14 @@ func (rec *MyRecovery) ServeHTTP(rw http.ResponseWriter, r *http.Request, next h
 
 	defer func() {
 		if err := recover(); err != nil {
-			rec.Logger.Printf("PANIC: %s\n", err)
+			remoteAddr := r.Header.Get("X-Forwarded-For")
+			if remoteAddr == "" {
+				remoteAddr = r.RemoteAddr
+			}
+
+			color.Set(color.FgRed)
+			rec.Logger.Printf("%-25s | %-7s | %s", remoteAddr, "PANIC", err)
+			color.Unset()
 
 			renderer := NewRender()
 			renderer.Render.HTML(rw, http.StatusInternalServerError, "error500", content)
