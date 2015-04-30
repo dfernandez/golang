@@ -4,6 +4,7 @@
 	<th>Id</th>
 	<th>Name</th>
 	<th class="hidden-xs">Email</th>
+	<th class="hidden-xs">Gender</th>
 	<th>First login</th>
 	<th>Last login</th>
 	<th>Is admin</th>
@@ -13,6 +14,7 @@
 	<td>{{ $profile.ID }}</td>
 	<td>{{ $profile.Name }}</td>
 	<td class="hidden-xs">{{ $profile.Email }}</td>
+	<td class="hidden-xs">{{ $profile.Gender }}</td>
 	<td>{{ $profile.FormatedFirstLogin }}</td>
 	<td>{{ $profile.FormatedLastLogin }}</td>
 	<td>{{ if $profile.Admin }}<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{{ end }}</td>

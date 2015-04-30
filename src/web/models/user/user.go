@@ -16,6 +16,7 @@ type Profile struct {
 	ID                 int
 	Name               string
 	Email              string
+	Gender             string
 	Profile            string
 	Picture            string
 	FirstLogin         time.Time
@@ -36,7 +37,7 @@ var err error
 func GetProfiles(db *sql.DB) map[int]Profile {
 	profiles := make(map[int]Profile)
 
-	rows, err := db.Query("select id, name, email, profile, picture, firstLogin, lastLogin, isAdmin from user order by isAdmin desc, name asc")
+	rows, err := db.Query("select id, name, email, gender, profile, picture, firstLogin, lastLogin, isAdmin from user order by isAdmin desc, name asc")
 
 	if err != nil {
 		panic(err)
@@ -51,15 +52,16 @@ func GetProfiles(db *sql.DB) map[int]Profile {
 		var id int
 		var name string
 		var email string
+		var gender string
 		var profile string
 		var picture string
 		var firstLogin string
 		var lastLogin string
 		var admin bool
 
-		rows.Scan(&id, &name, &email, &profile, &picture, &firstLogin, &lastLogin, &admin)
+		rows.Scan(&id, &name, &email, &gender, &profile, &picture, &firstLogin, &lastLogin, &admin)
 
-		p := Profile{ID: id, Name: name, Email: email, Profile: profile, Picture: picture, Admin: admin}
+		p := Profile{ID: id, Name: name, Email: email, Gender: gender, Profile: profile, Picture: picture, Admin: admin}
 
 		firstLoginTime, err1 := time.Parse(dbDateTime, firstLogin)
 		lastLoginTime, err2 := time.Parse(dbDateTime, lastLogin)
@@ -110,7 +112,7 @@ func (p *Profile) Upsert(db *sql.DB) {
 
 		firstLogin = time.Now().Local().Format(dbDateTime)
 
-		result, err = db.Exec("insert into user set name = ?, email = ?, profile = ?, picture = ?, firstLogin = ?", p.Name, p.Email, p.Profile, p.Picture, firstLogin)
+		result, err = db.Exec("insert into user set name = ?, email = ?, gender = ?, profile = ?, picture = ?, firstLogin = ?", p.Name, p.Email, p.Gender, p.Profile, p.Picture, firstLogin)
 		if err != nil {
 			panic(err)
 		}
