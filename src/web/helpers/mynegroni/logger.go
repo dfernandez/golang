@@ -2,6 +2,7 @@ package mynegroni
 
 import (
 	"github.com/codegangsta/negroni"
+	"github.com/fatih/color"
 	"log"
 	"net/http"
 	"os"
@@ -12,6 +13,28 @@ import (
 type Logger struct {
 	// Logger inherits from log.Logger used to log messages with the Logger middleware
 	*log.Logger
+}
+
+const LOG_PANIC = "PANIC"
+const LOG_ERROR = "ERROR"
+
+func LogMessage(r *http.Request, errorType string, errorMessage string) {
+
+	remoteAddr := r.Header.Get("X-Forwarded-For")
+	if remoteAddr == "" {
+		remoteAddr = r.RemoteAddr
+	}
+
+	l := log.New(os.Stdout, "[negroni] ", 0)
+
+	if errorType == LOG_PANIC {
+		color.Set(color.FgRed)
+	} else {
+		color.Set(color.FgYellow)
+	}
+
+	l.Printf("%-25s | %-7s | %s", remoteAddr, errorType, errorMessage)
+	color.Unset()
 }
 
 // NewLogger returns a new Logger instance

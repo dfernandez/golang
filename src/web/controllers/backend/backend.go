@@ -2,11 +2,11 @@ package backend
 
 import (
 	"encoding/gob"
+	"fmt"
 	"github.com/codegangsta/negroni"
 	sessions "github.com/goincremental/negroni-sessions"
 	"github.com/gorilla/context"
 	"github.com/unrolled/render"
-	"log"
 	"net/http"
 	"os"
 	"web/helpers/mynegroni"
@@ -45,7 +45,7 @@ var LoginRequired = func() negroni.HandlerFunc {
 			if !profile.IsAdmin(db) {
 				userProfile(content, session)
 
-				log.Printf("UNAUTHORIZED ACCESS: %s", profile.Email)
+				mynegroni.LogMessage(r, mynegroni.LOG_ERROR, fmt.Sprintf("UNAUTHORIZED ACCESS: %s", profile.Email))
 
 				renderer := mynegroni.NewRender()
 				renderer.Render.HTML(rw, http.StatusForbidden, "error403", content)
