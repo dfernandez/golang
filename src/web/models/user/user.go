@@ -3,7 +3,9 @@ package user
 import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/stathat/go"
 	"math/rand"
+	"os"
 	"time"
 )
 
@@ -124,6 +126,11 @@ func (p *Profile) Upsert(db *sql.DB) {
 
 		lastInsertId, _ := result.LastInsertId()
 		p.ID = int(lastInsertId)
+
+		if os.Getenv("ENV") == "production" {
+			stathat.PostEZCount("users - new", "david1983xtc@gmail.com", 1)
+		}
+
 	case err != nil:
 		panic(err)
 	default:

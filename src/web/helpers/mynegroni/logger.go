@@ -3,6 +3,7 @@ package mynegroni
 import (
 	"github.com/codegangsta/negroni"
 	"github.com/fatih/color"
+	"github.com/stathat/go"
 	"log"
 	"net/http"
 	"os"
@@ -63,6 +64,12 @@ func (l *Logger) ServeHTTP(rw http.ResponseWriter, r *http.Request, next http.Ha
 		remoteAddr = r.RemoteAddr
 	}
 
+	requestTime := time.Since(start)
+
+	if os.Getenv("ENV") == "production" {
+		stathat.PostEZValue("visits - request", "david1983xtc@gmail.com", requestTime.Seconds())
+	}
+
 	res := rw.(negroni.ResponseWriter)
-	l.Printf("%-25s | %-7s | %-60s | %v %-25s | %12v", remoteAddr, r.Method, r.URL.Path, res.Status(), http.StatusText(res.Status()), time.Since(start))
+	l.Printf("%-25s | %-7s | %-60s | %v %-25s | %12v", remoteAddr, r.Method, r.URL.Path, res.Status(), http.StatusText(res.Status()), requestTime)
 }
