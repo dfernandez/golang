@@ -128,7 +128,7 @@ func (p *Profile) Upsert(db *sql.DB) {
 		p.ID = int(lastInsertId)
 
 		if os.Getenv("ENV") == "production" {
-			stathat.PostEZCount("users - new", "david1983xtc@gmail.com", 1)
+			stathat.PostEZCount("users - new user", "david1983xtc@gmail.com", 1)
 		}
 
 	case err != nil:
