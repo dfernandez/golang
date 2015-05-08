@@ -3,8 +3,8 @@ package frontend
 import (
 	sessions "github.com/goincremental/negroni-sessions"
 	"github.com/unrolled/render"
+	"mynegroni"
 	"net/http"
-	"web/helpers/mynegroni"
 )
 
 func Dashboard(rw http.ResponseWriter, r *http.Request, render *render.Render, s sessions.Session, c *mynegroni.Content) {

@@ -5,9 +5,9 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/stathat/go"
 	"math/rand"
+	"mynegroni"
 	"os"
 	"time"
-	"web/helpers/mynegroni"
 )
 
 const dateFormat = "02 Jan 2006"

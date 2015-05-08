@@ -4,8 +4,8 @@ import (
 	sessions "github.com/goincremental/negroni-sessions"
 	"github.com/gorilla/context"
 	"github.com/unrolled/render"
+	"mynegroni"
 	"net/http"
-	"web/helpers/mynegroni"
 	"web/models/user"
 )
 

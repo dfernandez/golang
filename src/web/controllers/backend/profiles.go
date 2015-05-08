@@ -3,8 +3,8 @@ package backend
 import (
 	sessions "github.com/goincremental/negroni-sessions"
 	"github.com/unrolled/render"
+	"mynegroni"
 	"net/http"
-	"web/helpers/mynegroni"
 	"web/models/user"
 )
 
