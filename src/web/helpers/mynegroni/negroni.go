@@ -37,9 +37,6 @@ func New() *negroni.Negroni {
 	// Render
 	render := NewRender()
 
-	// Recovery
-	recovery := NewRecovery()
-
 	// Middleware
 	n.Use(logger)
 	n.Use(static)
@@ -50,9 +47,6 @@ func New() *negroni.Negroni {
 	n.Use(BasicOAuth)
 	n.Use(GoogleOAuth)
 	n.Use(FacebookOAuth)
-
-	// Recovery
-	n.Use(recovery)
 
 	return n
 }

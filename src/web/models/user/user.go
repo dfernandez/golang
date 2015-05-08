@@ -10,8 +10,8 @@ import (
 	"web/helpers/mynegroni"
 )
 
-const dateFormat = "02 Apr 2006"
-const timeFormat = "02 Apr 2006 15:04:01"
+const dateFormat = "02 Jan 2006"
+const timeFormat = "02 Jan 2006 15:04:01"
 const dbDateTime = "2006-01-02 15:04:01"
 
 // User profile struct.
