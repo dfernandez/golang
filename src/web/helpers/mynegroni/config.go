@@ -1,16 +1,9 @@
 package mynegroni
 
 import (
-	"database/sql"
-	"github.com/codegangsta/negroni"
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/gorilla/context"
-	"net/http"
+	"code.google.com/p/gcfg"
+	"os"
 )
-
-type Configurator interface {
-	GetKey(string) interface{}
-}
 
 type Config struct {
 	OAuth map[string]*struct {
@@ -24,23 +17,21 @@ type Config struct {
 	Domain map[string]*struct {
 		Url string
 	}
+	Stathat struct {
+		Account string
+	}
 }
 
-func (c *Config) GetDatabase(env string) *sql.DB {
-	dbConfig := c.Database[env]
+func LoadConfig() *Config {
 
-	db, err := sql.Open(dbConfig.Connector, dbConfig.Dns)
+	var config Config
+
+	path := os.Getenv("GOPATH") + "/cfg/app.gcfg"
+	err := gcfg.ReadFileInto(&config, path)
 
 	if err != nil {
 		panic(err)
 	}
 
-	return db
+	return &config
 }
-
-var Settings = func() negroni.HandlerFunc {
-	return func(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
-		context.Set(r, "config", config)
-		next(rw, r)
-	}
-}()

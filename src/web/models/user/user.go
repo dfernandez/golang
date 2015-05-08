@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"os"
 	"time"
+	"web/helpers/mynegroni"
 )
 
 const dateFormat = "02 Apr 2006"
@@ -35,8 +36,22 @@ type dbParams struct {
 
 var db *sql.DB
 var err error
+var config *mynegroni.Config
 
-func GetProfiles(db *sql.DB) map[int]Profile {
+func init() {
+
+	config = mynegroni.LoadConfig()
+
+	dbConfig := config.Database[os.Getenv("ENV")]
+
+	db, err = sql.Open(dbConfig.Connector, dbConfig.Dns)
+
+	if err != nil {
+		panic(err)
+	}
+}
+
+func GetProfiles() map[int]Profile {
 	profiles := make(map[int]Profile)
 
 	rows, err := db.Query("select id, name, email, gender, profile, picture, firstLogin, lastLogin, isAdmin from user order by isAdmin desc, name asc")
@@ -83,7 +98,7 @@ func GetProfiles(db *sql.DB) map[int]Profile {
 	return profiles
 }
 
-func (p *Profile) IsAdmin(db *sql.DB) bool {
+func (p *Profile) IsAdmin() bool {
 	var isAdmin bool
 
 	err = db.QueryRow("select isAdmin from user where email like ?", p.Email).Scan(&isAdmin)
@@ -92,7 +107,7 @@ func (p *Profile) IsAdmin(db *sql.DB) bool {
 }
 
 // Update saves user profile to database.
-func (p *Profile) Upsert(db *sql.DB) {
+func (p *Profile) Upsert() {
 
 	var result sql.Result
 	var err error
@@ -128,7 +143,7 @@ func (p *Profile) Upsert(db *sql.DB) {
 		p.ID = int(lastInsertId)
 
 		if os.Getenv("ENV") == "production" {
-			stathat.PostEZCount("users - new user", "david1983xtc@gmail.com", 1)
+			stathat.PostEZCountOne("users - new user", config.Stathat.Account)
 		}
 
 	case err != nil:

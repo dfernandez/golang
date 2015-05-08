@@ -20,6 +20,8 @@ const authToken = "oauth_token"
 const oauthProfile = "oauth_profile"
 const userProfile = "profile"
 
+var config *Config
+
 // Token struct.
 type token struct {
 	oauth2.Token
@@ -134,6 +136,10 @@ var GoogleOAuth = func() negroni.HandlerFunc {
 				// Save oauth profile to context.
 				context.Set(r, oauthProfile, profile)
 
+				if os.Getenv("ENV") == "production" {
+					stathat.PostEZCountOne("users - oauth google", config.Stathat.Account)
+				}
+
 				next(rw, r)
 			default:
 				next(rw, r)
@@ -212,6 +218,10 @@ var FacebookOAuth = func() negroni.HandlerFunc {
 				// Save oauth profile to context.
 				context.Set(r, oauthProfile, profile)
 
+				if os.Getenv("ENV") == "production" {
+					stathat.PostEZCountOne("users - oauth facebook", config.Stathat.Account)
+				}
+
 				next(rw, r)
 			default:
 				next(rw, r)
@@ -225,6 +235,8 @@ var FacebookOAuth = func() negroni.HandlerFunc {
 func init() {
 	var oauth_profile OauthProfile
 	gob.Register(oauth_profile)
+
+	config = LoadConfig()
 }
 
 func GetToken(r *http.Request) (t *token) {

@@ -4,7 +4,6 @@ import (
 	sessions "github.com/goincremental/negroni-sessions"
 	"github.com/gorilla/context"
 	"net/http"
-	"web/models/user"
 )
 
 type Container interface {
@@ -37,7 +36,7 @@ func GetUserProfile(content *Content, session sessions.Session) {
 		return
 	}
 
-	p := session.Get("profile").(user.Profile)
+	p := session.Get("profile")
 
 	content.Set("profile", &p)
 }

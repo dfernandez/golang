@@ -5,7 +5,6 @@ import (
 	"github.com/gorilla/context"
 	"github.com/unrolled/render"
 	"net/http"
-	"os"
 	"web/helpers/mynegroni"
 	"web/models/user"
 )
@@ -23,13 +22,10 @@ func LoginCallback(rw http.ResponseWriter, r *http.Request, render *render.Rende
 		return
 	}
 
-	config := c.Get("config").(mynegroni.Config)
-	db := config.GetDatabase(os.Getenv("ENV"))
-
 	p := context.Get(r, "oauth_profile").(mynegroni.OauthProfile)
 
 	profile := &user.Profile{Name: p.Name, Email: p.Email, Gender: p.Gender, Profile: p.Profile, Picture: p.Picture}
-	profile.Upsert(db)
+	profile.Upsert()
 
 	s.Set("profile", profile)
 

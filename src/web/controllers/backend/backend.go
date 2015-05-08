@@ -8,7 +8,6 @@ import (
 	"github.com/gorilla/context"
 	"github.com/unrolled/render"
 	"net/http"
-	"os"
 	"web/helpers/mynegroni"
 	"web/models/user"
 )
@@ -39,10 +38,7 @@ var LoginRequired = func() negroni.HandlerFunc {
 			content := mynegroni.NewContext(r)
 			profile := session.Get("profile").(user.Profile)
 
-			config := content.Get("config").(mynegroni.Config)
-			db := config.GetDatabase(os.Getenv("ENV"))
-
-			if !profile.IsAdmin(db) {
+			if !profile.IsAdmin() {
 				userProfile(content, session)
 
 				mynegroni.LogMessage(r, mynegroni.LOG_ERROR, fmt.Sprintf("UNAUTHORIZED ACCESS: %s", profile.Email))

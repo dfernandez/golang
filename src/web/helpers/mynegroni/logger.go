@@ -67,8 +67,8 @@ func (l *Logger) ServeHTTP(rw http.ResponseWriter, r *http.Request, next http.Ha
 	requestTime := time.Since(start)
 
 	if os.Getenv("ENV") == "production" {
-		stathat.PostEZCount("visits - request counter", "david1983xtc@gmail.com", 1)
-		stathat.PostEZValue("visits - request timer", "david1983xtc@gmail.com", requestTime.Seconds())
+		stathat.PostEZCountOne("visits - request counter", config.Stathat.Account)
+		stathat.PostEZValue("visits - request timer", config.Stathat.Account, requestTime.Seconds())
 	}
 
 	res := rw.(negroni.ResponseWriter)
