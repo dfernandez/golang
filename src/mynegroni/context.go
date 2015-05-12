@@ -1,7 +1,6 @@
 package mynegroni
 
 import (
-	sessions "github.com/goincremental/negroni-sessions"
 	"github.com/gorilla/context"
 	"net/http"
 )
@@ -29,14 +28,4 @@ func (c *Content) Get(key interface{}) interface{} {
 
 func (c *Content) Set(key interface{}, val interface{}) {
 	c.vars[key] = val
-}
-
-func GetUserProfile(content *Content, session sessions.Session) {
-	if session.Get("profile") == nil {
-		return
-	}
-
-	p := session.Get("profile")
-
-	content.Set("profile", &p)
 }

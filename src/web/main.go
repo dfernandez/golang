@@ -31,7 +31,7 @@ func main() {
 	n.Use(recovery)
 
 	mainRouter := mux.NewRouter()
-	mainRouter.NotFoundHandler = http.HandlerFunc(mynegroni.NotFound)
+	mainRouter.NotFoundHandler = http.HandlerFunc(helpers.NotFound)
 
 	// Frontend
 	mainRouter.Handle("/", frontend.Controller(frontend.Index))

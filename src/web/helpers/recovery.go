@@ -26,8 +26,6 @@ func (rec *MyRecovery) ServeHTTP(rw http.ResponseWriter, r *http.Request, next h
 	session := sessions.GetSession(r)
 	content := mynegroni.NewContext(r)
 
-	mynegroni.GetUserProfile(content, session)
-
 	if session.Get("profile") != nil {
 		p := session.Get("profile").(user.Profile)
 
