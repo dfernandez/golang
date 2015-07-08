@@ -1,26 +1,19 @@
-### Colernio
-Website based on Negroni and Gorilla
+[![Build Status](https://travis-ci.org/david1983xtc/golang.svg?branch=master)](https://travis-ci.org/david1983xtc/golang)
+# Golang demo app
 
-### Needed configuration
-- google+ oauth credentials
-- facebook oauth credentials
-- mysql database
+Web application based on Negroni
 
-### Needed packages
-#### App settings
-code.google.com/p/gcfg
+## Setting up dependencies
 
-#### Negroni (+render +sessions)
-github.com/codegangsta/negroni
-github.com/unrolled/render
-github.com/goincremental/negroni-sessions
- 
-#### Gorilla router and context
-github.com/gorilla/context
-github.com/gorilla/mux
-
-#### Authentication using OAuth
-golang.org/x/oauth2
-
-#### Mysql driver
-github.com/go-sql-driver/mysql
+````
+go get github.com/codegangsta/negroni
+go get github.com/gorilla/mux
+go get code.google.com/p/gcfg
+go get github.com/fatih/color
+go get github.com/goincremental/negroni-sessions
+go get github.com/go-sql-driver/mysql
+go get github.com/stathat/go
+go get github.com/unrolled/render
+go get golang.org/x/oauth2
+go get google.golang.org/cloud/compute/metadata
+````
