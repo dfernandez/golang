@@ -14,4 +14,4 @@ install:
   - go get golang.org/x/oauth2
   - go get google.golang.org/cloud/compute/metadata
 
-  - export GOPATH=${TRAVIS_BUILD_DIR}/Godeps/_workspace:$GOPATH
+  - export GOPATH=${TRAVIS_BUILD_DIR}:$GOPATH
