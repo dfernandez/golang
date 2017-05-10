@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/david1983xtc/golang.svg?branch=master)](https://travis-ci.org/david1983xtc/golang)
+[![Build Status](https://travis-ci.org/dfernandez/golang.svg?branch=master)](https://travis-ci.org/dfernandez/golang)
 # Golang demo app
 
 Web application based on Negroni
